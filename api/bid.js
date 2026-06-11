@@ -16,13 +16,13 @@ export default async function handler(req, res) {
 
   const endpoints = [
 
-        'getBidPblancListInfoServc',
+        'getBidPblancListInfoServcPPSSrch',
 
-        'getBidPblancListInfoCnstwk',
+        'getBidPblancListInfoCnstwkPPSSrch',
 
-        'getBidPblancListInfoThng',
+        'getBidPblancListInfoThngPPSSrch',
 
-        'getBidPblancListInfoEtc',
+        'getBidPblancListInfoEtcPPSSrch',
 
       ];
 
