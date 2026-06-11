@@ -10,9 +10,9 @@ export default async function handler(req, res) {
 
   if (!keyword || !apiKey) return res.status(400).json({ error: 'params missing' });
 
-  const sd = startDt || '20250101';
+  const sd = (startDt || '20250101') + '0000';
 
-  const ed = endDt || '20261231';
+  const ed = (endDt || '20261231') + '2359';
 
   const endpoints = [
 
@@ -30,9 +30,10 @@ export default async function handler(req, res) {
 
       const fetches = endpoints.map(ep => {
 
-                                          const url = new URL(`https://apis.data.go.kr/1230000/ad/BidPublicInfoService/${ep}`);
+                                          const url = new URL(`https://apis.data.go.kr/1230000/BidPublicInfoService/${ep}`);
 
                                           url.searchParams.set('serviceKey', apiKey);
+                                          url.searchParams.set('inqryDiv', '1');
 
                                           url.searchParams.set('numOfRows', '100');
 
