@@ -10,9 +10,9 @@ export default async function handler(req, res) {
 
   if (!keyword || !apiKey) return res.status(400).json({ error: 'params missing' });
 
-  const sd = (startDt || '20250101') + '0000';
+  const sd = startDt || '20250101';
 
-  const ed = (endDt || '20261231') + '2359';
+  const ed = endDt || '20261231';
 
   const endpoints = [
 
