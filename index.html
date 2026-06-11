@@ -553,7 +553,7 @@ async function startSearch(){
   try {
     const keywords=Array.from(selKw);
     // Vercel 서버리스 API 호출 (CORS 해결)
-    const endpoint = searchType==='bid' ? '/bid' : '/prespec';
+    const endpoint = searchType==='bid' ? '/api/bid' : '/api/prespec';
     const promises = keywords.map(kw =>
       fetch(`${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}&apiKey=${encodeURIComponent(apiKey)}`)
         .then(r=>r.json())
