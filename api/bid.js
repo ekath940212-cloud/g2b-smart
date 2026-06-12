@@ -10,68 +10,105 @@ export default async function handler(req, res) {
 
   if (!keyword || !apiKey) return res.status(400).json({ error: 'params missing' });
 
-  const sd = (startDt || '20250101') + '0000';
-
-  const ed = (endDt || '20261231') + '2359';
-
   const endpoints = [
 
-        'getBidPblancListInfoServcPPSSrch',
+        'getBidPblancListInfoServc',
 
-        'getBidPblancListInfoCnstwkPPSSrch',
+        'getBidPblancListInfoCnstwk',
 
-        'getBidPblancListInfoThngPPSSrch',
+        'getBidPblancListInfoThng',
 
-        'getBidPblancListInfoEtcPPSSrch',
+        'getBidPblancListInfoEtc',
 
       ];
 
+  // 날짜를 7일 단위로 쪼개기
+
+  const start = new Date(startDt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+
+  const end = new Date(endDt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+
+  const dateRanges = [];
+
+  let cur = new Date(start);
+
+  while (cur <= end) {
+
+      const next = new Date(cur);
+
+      next.setDate(next.getDate() + 6);
+
+      if (next > end) next.setTime(end.getTime());
+
+      const fmt = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+
+      dateRanges.push({ sd: fmt(cur)+'0000', ed: fmt(next)+'2359' });
+
+      cur = new Date(next);
+
+      cur.setDate(cur.getDate() + 1);
+
+  }
+
   try {
 
-      const fetches = endpoints.map(ep => {
+      const allFetches = [];
 
-                                          const url = new URL(`https://apis.data.go.kr/1230000/BidPublicInfoService/${ep}`);
+      for (const ep of endpoints) {
 
-                                          url.searchParams.set('serviceKey', apiKey);
-                                          url.searchParams.set('inqryDiv', '1');
+          for (const { sd, ed } of dateRanges) {
 
-                                          url.searchParams.set('numOfRows', '100');
+                const url = new URL(`https://apis.data.go.kr/1230000/ad/BidPublicInfoService/${ep}`);
 
-                                          url.searchParams.set('pageNo', '1');
+                url.searchParams.set('serviceKey', apiKey);
 
-                                          url.searchParams.set('type', 'json');
+                url.searchParams.set('numOfRows', '100');
 
-                                          url.searchParams.set('bidNtceNm', keyword);
+                url.searchParams.set('pageNo', '1');
 
-                                          url.searchParams.set('inqryBgnDt', sd);
+                url.searchParams.set('inqryDiv', '1');
 
-                                          url.searchParams.set('inqryEndDt', ed);
+                url.searchParams.set('type', 'json');
 
-                                          return fetch(url.toString())
+                url.searchParams.set('bidNtceNm', keyword);
 
-                                            .then(r => r.json())
+                url.searchParams.set('inqryBgnDt', sd);
 
-                                            .then(d => {
+                url.searchParams.set('inqryEndDt', ed);
 
-                                                            const items = d?.response?.body?.items?.item;
+                allFetches.push(
 
-                                                            return !items ? [] : Array.isArray(items) ? items : [items];
+                            fetch(url.toString())
 
-                                            })
+                              .then(r => r.json())
 
-                                            .catch(() => []);
+                              .then(d => {
 
-      });
+                                                  const items = d?.response?.body?.items?.item;
 
-      const results = await Promise.all(fetches);
+                                                  return !items ? [] : Array.isArray(items) ? items : [items];
+
+                              })
+
+                              .catch(() => [])
+
+                          );
+
+          }
+
+      }
+
+      const results = await Promise.all(allFetches);
 
       const allItems = results.flat();
+
+      // 중복 제거
 
       const seen = new Set();
 
       const items = allItems.filter(item => {
 
-                                          const id = item.bidNtceNo || JSON.stringify(item).slice(0, 50);
+                                          const id = item.bidNtceNo || JSON.stringify(item).slice(0, 60);
 
                                           if (seen.has(id)) return false;
 
