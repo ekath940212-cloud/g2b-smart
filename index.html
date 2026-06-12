@@ -12,7 +12,7 @@
   --blue:#2563eb; --blue-l:#eff4ff; --blue-m:#93b8f8;
   --green:#16a34a; --green-l:#f0fdf4;
   --amber:#d97706; --amber-l:#fffbeb;
-  --red:#dc2626; --red-l:#fef2f2;
+  --red:#dc2626; --red-l:#fef2f2;hh
   --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;
   --r-sm:6px; --r-md:10px; --r-lg:14px;
 }
@@ -553,9 +553,9 @@ async function startSearch(){
   try {
     const keywords=Array.from(selKw);
     // Vercel 서버리스 API 호출 (CORS 해결)
-    const endpoint = searchType==='bid' ? '/api/bid' : '/api/prespec';
+    const endpoint = '/api/search';
     const promises = keywords.map(kw =>
-      fetch(`${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}&apiKey=${encodeURIComponent(apiKey)}`)
+      fetch(`${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`)
         .then(r=>r.json())
         .then(data=>{ const items=(data.items||[]).map(i=>({...i,_kw:kw})); kwCounts[kw]=items.length; return items; })
         .catch(()=>{ kwCounts[kw]=0; return []; })
