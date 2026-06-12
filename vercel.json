@@ -1,6 +1,1 @@
-{
-  "rewrites": [
-    { "source": "/api/bid", "destination": "/api/bid.js" },
-    { "source": "/api/prespec", "destination": "/api/prespec.js" }
-  ]
-}
+{"crons":[{"path":"/api/collect","schedule":"0 22 * * 0-4"}]}
