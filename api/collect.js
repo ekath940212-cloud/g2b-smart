@@ -5,9 +5,15 @@ export default async function handler(req, res) {
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
   if (!G2B_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) return res.status(500).json({ error: '환경변수 누락' });
   const now = new Date();
-  const past = new Date(now); past.setDate(past.getDate() - 7);
   const fmt = d => String(d.getFullYear()) + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
-  const sd = fmt(past)+'0000'; const ed = fmt(now)+'2359';
+  let sd, ed;
+  if (req.query.startDt && req.query.endDt) {
+    sd = req.query.startDt + '0000';
+    ed = req.query.endDt + '2359';
+  } else {
+    const past = new Date(now); past.setDate(past.getDate() - 7);
+    sd = fmt(past)+'0000'; ed = fmt(now)+'2359';
+  }
   const endpoints = [
     { ep: 'getBidPblancListInfoServc', type: 'servc' },
     { ep: 'getBidPblancListInfoCnstwk', type: 'cnstwk' },
@@ -64,7 +70,7 @@ export default async function handler(req, res) {
       }
     } catch(e) { errors.push(ep + ': ' + e.message); }
   }
-  res.status(200).json({ success:true, totalSaved, errors, collectedAt: new Date().toISOString() });
+  res.status(200).json({ success:true, totalSaved, errors, collectedAt: new Date().toISOString(), range: { sd, ed } });
 }
 
 function buildUrl(ep, apiKey, sd, ed, page, rows) {
