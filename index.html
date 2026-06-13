@@ -7,8 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
-  --bg:#f7f8fa; --surface:#fff; --border:#e2e5eb;
-  --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;
+  --bg:#f7f8fa; --surface:#fff; --hborder:#e2e5eb;
+  --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;h
   --blue:#2563eb; --blue-l:#eff4ff; --blue-m:#93b8f8;
   --green:#16a34a; --green-l:#f0fdf4;
   --amber:#d97706; --amber-l:#fffbeb;
@@ -562,11 +562,14 @@ async function startSearch(){
     );
     let raw = (await Promise.all(promises)).flat();
 
-    // 2차 필터
-    if(selFil.size>0){
+    // 2차 필터 (선택된 필터가 있으면 공고명에 하나라도 포함된 것만)
+    if (selFil.size > 0) {
       raw=raw.filter(item=>{
-        const t=(item.bidNtceNm||item.prdctClsfcNoNm||item.ntceNm||'').toLowerCase();
-        return Array.from(selFil).some(f=>t.includes(f.replace(/\s/g,'').toLowerCase())||t.includes(f.toLowerCase()));
+        const t=(item.bidNtceNm||item.bid_ntce_nm||'').toLowerCase();
+        return Array.from(selFil).some(f=>{
+          const fLow=f.toLowerCase().replace(/\s/g,'');
+          return t.replace(/\s/g,'').includes(fLow);
+        });
       });
     }
 
