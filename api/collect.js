@@ -50,8 +50,9 @@ export default async function handler(req, res) {
         const pagePromises = [];
         for (let p = 1; p <= Math.min(totalPages, 20); p++) {
           pagePromises.push(fetch(buildUrl(ep, G2B_API_KEY, sd, ed, p, 100)).then(r=>r.json()).then(d=>{
-            const items=d?.response?.body?.items?.item;
-            return !items?[]:(Array.isArray(items)?items:[items]);
+            const items=d?.response?.body?.items;
+            if (!items) return [];
+            return Array.isArray(items)?items:[items];
           }).catch(()=>[]));
         }
         const allItems = (await Promise.all(pagePromises)).flat();
