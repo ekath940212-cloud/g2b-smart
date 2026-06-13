@@ -5,7 +5,8 @@ export default async function handler(req, res) {
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
   if (!G2B_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) return res.status(500).json({ error: '환경변수 누락' });
 
-  const KEYWORDS = ['음식물','소각','자원','순환','재활용','매립','폐기물','침출수','슬러지','바이오','열분해','분뇌','환경'];
+  const KW1 = ['음식물','소각','자원','순환','재활용','매립','폐기물','침출수','슬러지','바이오','열분해','분뇌','환경'];
+  const KW2 = ['실시설계','기본설계','타당성','기본계획','기본 및 실시'];
 
   let startDt = req.query.startDt;
   let endDt = req.query.endDt;
@@ -26,13 +27,13 @@ export default async function handler(req, res) {
   ];
 
   const chunks = [];
-  let cur = new Date(startDt.slice(0,4)+'-'+startDt.slice(4,6)+'-'+startDt.slice(6,8));
-  const end = new Date(endDt.slice(0,4)+'-'+endDt.slice(4,6)+'-'+endDt.slice(6,8));
   const fmt = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  while (cur <= end) {
+  let cur = new Date(startDt.slice(0,4)+'-'+startDt.slice(4,6)+'-'+startDt.slice(6,8));
+  const endDate = new Date(endDt.slice(0,4)+'-'+endDt.slice(4,6)+'-'+endDt.slice(6,8));
+  while (cur <= endDate) {
     const chunkEnd = new Date(cur);
     chunkEnd.setDate(chunkEnd.getDate() + 29);
-    if (chunkEnd > end) chunkEnd.setTime(end.getTime());
+    if (chunkEnd > endDate) chunkEnd.setTime(endDate.getTime());
     chunks.push({ sd: fmt(cur)+'0000', ed: fmt(chunkEnd)+'2359' });
     cur = new Date(chunkEnd);
     cur.setDate(cur.getDate() + 1);
@@ -50,20 +51,24 @@ export default async function handler(req, res) {
         const pagePromises = [];
         for (let p = 1; p <= Math.min(totalPages, 20); p++) {
           pagePromises.push(fetch(buildUrl(ep, G2B_API_KEY, sd, ed, p, 100)).then(r=>r.json()).then(d=>{
-            const items=d?.response?.body?.items;
-            if (!items) return [];
-            return Array.isArray(items)?items:[items];
+            const body = d?.response?.body;
+            const items = body?.items?.item || body?.items;
+            return !items?[]:(Array.isArray(items)?items:[items]);
           }).catch(()=>[]));
         }
         const allItems = (await Promise.all(pagePromises)).flat();
 
+        // KW1 하나라도 AND KW2 하나라도 포함된 공고만 저장
         const filtered = allItems.filter(item => {
-          const nm = (item.bidNtceNm || '').toLowerCase();
-          return KEYWORDS.some(kw => nm.includes(kw.toLowerCase()));
+          const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g,'');
+          const hasKw1 = KW1.some(kw => nm.includes(kw.toLowerCase()));
+          const hasKw2 = KW2.some(kw => nm.includes(kw.toLowerCase().replace(/\s/g,'')));
+          return hasKw1 && hasKw2;
         });
 
-        for (let i = 0; i < filtered.length; i += 100) {
-          const batch = filtered.slice(i, i+100).map(item => ({
+        // 개별 upsert (중복 에러 방지)
+        for (const item of filtered) {
+          const row = {
             bid_ntce_no: item.bidNtceNo||null,
             bid_ntce_nm: item.bidNtceNm||'',
             ntce_instt_nm: item.ntceInsttNm||'',
@@ -75,14 +80,17 @@ export default async function handler(req, res) {
             bid_type: type,
             raw_data: item,
             updated_at: new Date().toISOString(),
-          }));
-          const r = await fetch(`${SUPABASE_URL}/rest/v1/bid_notices`, {
+          };
+          const r = await fetch(`${SUPABASE_URL}/rest/v1/bid_notices?on_conflict=bid_ntce_no`, {
             method: 'POST',
             headers: {'Content-Type':'application/json','apikey':SUPABASE_SERVICE_KEY,'Authorization':`Bearer ${SUPABASE_SERVICE_KEY}`,'Prefer':'resolution=merge-duplicates'},
-            body: JSON.stringify(batch),
+            body: JSON.stringify(row),
           });
-          if (r.ok) totalSaved += batch.length;
-          else errors.push(await r.text().then(t=>t.slice(0,100)));
+          if (r.ok) totalSaved++;
+          else {
+            const t = await r.text();
+            if (!t.includes('23505')) errors.push(t.slice(0,80));
+          }
         }
       } catch(e) { errors.push(`${ep} ${sd}: ${e.message}`); }
     }
