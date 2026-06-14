@@ -8,13 +8,20 @@ export default async function handler(req, res) {
   const { keyword, filter, startDt, endDt } = req.query;
   if (!keyword) return res.status(400).json({ error: 'keyword 필요' });
   try {
-    let url = `${SUPABASE_URL}/rest/v1/bid_notices?select=*&bid_ntce_nm=ilike.*${encodeURIComponent(keyword)}*&order=bid_cls_dt.desc.nullslast&limit=200`;
-    if (filter) url += `&bid_ntce_nm=ilike.*${encodeURIComponent(filter)}*`;
+    let url = `${SUPABASE_URL}/rest/v1/bid_notices?select=*&bid_ntce_nm=ilike.*${encodeURIComponent(keyword)}*&order=bid_cls_dt.desc.nullslast&limit=500`;
     if (startDt) url += `&ntce_dt=gte.${startDt.slice(0,4)}-${startDt.slice(4,6)}-${startDt.slice(6,8)}`;
     if (endDt) url += `&ntce_dt=lte.${endDt.slice(0,4)}-${endDt.slice(4,6)}-${endDt.slice(6,8)}T23:59:59`;
     const dbRes = await fetch(url, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } });
-    const items = await dbRes.json();
+    let items = await dbRes.json();
     if (!Array.isArray(items)) return res.status(200).json({ items: [], totalCount: 0 });
+    // filter 파라미터: | 구분 OR 조건으로 JS에서 필터링
+    if (filter) {
+      const filters = filter.split('|').map(f => f.toLowerCase().replace(/\s/g, ''));
+      items = items.filter(item => {
+        const nm = (item.bid_ntce_nm || '').toLowerCase().replace(/\s/g, '');
+        return filters.some(f => nm.includes(f));
+      });
+    }
     const mapped = items.map(item => ({
       ...item.raw_data,
       bidNtceNo: item.bid_ntce_no,
