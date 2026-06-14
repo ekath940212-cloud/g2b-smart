@@ -554,24 +554,18 @@ async function startSearch(){
     const keywords=Array.from(selKw);
     // Vercel 서버리스 API 호출 (CORS 해결)
     const endpoint = '/api/search';
-    const promises = keywords.map(kw =>
-      fetch(`${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`)
+    const filters = Array.from(selFil);
+    const promises = keywords.map(kw => {
+      let url = `${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`;
+      if (filters.length > 0) url += `&filter=${encodeURIComponent(filters.join('|'))}`;
+      return fetch(url)
         .then(r=>r.json())
-        .then(data=>{ const items=(data.items||[]).map(i=>({...i,_kw:kw})); kwCounts[kw]=items.length; return items; })
-        .catch(()=>{ kwCounts[kw]=0; return []; })
-    );
+        .then(d=>{ kwCounts[kw]=(d.items||[]).length; return d.items||[]; })
+        .catch(()=>[]);
+    });
     let raw = (await Promise.all(promises)).flat();
 
-    // 2차 필터 (선택된 필터가 있으면 공고명에 하나라도 포함된 것만)
-    if (selFil.size > 0) {
-      raw=raw.filter(item=>{
-        const t=(item.bidNtceNm||item.bid_ntce_nm||'').toLowerCase();
-        return Array.from(selFil).some(f=>{
-          const fLow=f.toLowerCase().replace(/\s/g,'');
-          return t.replace(/\s/g,'').includes(fLow);
-        });
-      });
-    }
+    // 2차 필터는 서버(search.js)에서 처리
 
     // 중복 제거
     const seen=new Set();
