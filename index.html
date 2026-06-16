@@ -316,8 +316,6 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
           <button class="preset" onclick="setPeriod('1w',this)">1주</button>
           <button class="preset active" onclick="setPeriod('1m',this)">1개월</button>
           <button class="preset" onclick="setPeriod('3m',this)">3개월</button>
-          <button class="preset" onclick="setPeriod('6m',this)">6개월</button>
-          <button class="preset" onclick="setPeriod('1y',this)">1년</button>
           <button class="preset" onclick="setPeriod('custom',this)">직접입력</button>
         </div>
         <div class="custom-period" id="customPeriod" style="display:none">
@@ -555,10 +553,21 @@ async function startSearch(){
     // Vercel 서버리스 API 호출 (CORS 해결)
     const endpoint = '/api/search';
     const filters = Array.from(selFil);
-    const promises = keywords.map(kw => {
-      let url = `${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`;
-      if (filters.length > 0) url += `&filter=${encodeURIComponent(filters.join('|'))}`;
-      return fetch(url)
+    const dateChunks = [];
+    let chunkCur = new Date(sd.slice(0,4)+'-'+sd.slice(4,6)+'-'+sd.slice(6,8));
+    const chunkEnd = new Date(ed.slice(0,4)+'-'+ed.slice(4,6)+'-'+ed.slice(6,8));
+    const fmtD = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    while (chunkCur <= chunkEnd) {
+      const next = new Date(chunkCur); next.setDate(next.getDate()+29);
+      if (next > chunkEnd) next.setTime(chunkEnd.getTime());
+      dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
+      chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
+    }
+    const promises = keywords.flatMap(kw =>
+      dateChunks.map(({ csd, ced }) => {
+        let url = `${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${csd}&endDt=${ced}`;
+        if (filters.length > 0) url += `&filter=${encodeURIComponent(filters.join('|'))}`;
+        return fetch(url)
         .then(r=>r.json())
         .then(d=>{ kwCounts[kw]=(d.items||[]).length; return d.items||[]; })
         .catch(()=>[]);
