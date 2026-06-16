@@ -3,8 +3,8 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
   const G2B_API_KEY = process.env.G2B_API_KEY;
-  if (!G2B_API_KEY) return res.status(500).json({ error: 'API 키 누락' });
-  const { keyword, filter, startDt, endDt } = req.query;
+  if (!G2B_API_KEY) return res.status(500).json({ error: 'API 키브 나락' });
+  const { keyword, startDt, endDt } = req.query;
   if (!keyword) return res.status(400).json({ error: 'keyword 필요' });
   const endpoints = [
     'getBidPblancListInfoServcPPSSrch',
@@ -14,6 +14,10 @@ export default async function handler(req, res) {
   ];
   const sd = (startDt || '20250101') + '0000';
   const ed = (endDt || '20261231') + '2359';
+  // 키워드에 공백 있으면 첫 번째 단어로 API 검색 후 나머지 단어로 프론트 필터링
+  const keywords = keyword.trim().split(/\s+/);
+  const mainKeyword = keywords[0];
+  const subKeywords = keywords.slice(1);
   try {
     const fetches = endpoints.map(ep => {
       const url = new URL(`https://apis.data.go.kr/1230000/ad/BidPublicInfoService/${ep}`);
@@ -22,7 +26,7 @@ export default async function handler(req, res) {
       url.searchParams.set('pageNo', '1');
       url.searchParams.set('inqryDiv', '1');
       url.searchParams.set('type', 'json');
-      url.searchParams.set('bidNtceNm', keyword);
+      url.searchParams.set('bidNtceNm', mainKeyword);
       url.searchParams.set('inqryBgnDt', sd);
       url.searchParams.set('inqryEndDt', ed);
       return fetch(url.toString())
@@ -35,7 +39,13 @@ export default async function handler(req, res) {
         .catch(() => []);
     });
     let items = (await Promise.all(fetches)).flat();
-    // 2차 필터 없음 - 프론트에서 처리
+    // 추가 키워드로 필터링 (교집합)
+    if (subKeywords.length > 0) {
+      items = items.filter(item => {
+        const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g, '');
+        return subKeywords.every(sk => nm.includes(sk.toLowerCase().replace(/\s/g, '')));
+      });
+    }
     // 중복 제거
     const seen = new Set();
     items = items.filter(item => {
