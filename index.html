@@ -563,10 +563,15 @@ async function startSearch(){
       dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
       chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
     }
-    const promises = keywords.flatMap(kw =>
+    // 필터가 있으면 필터를 메인 키워드로, 원래 키워드를 서브필터로 검색
+    // 필터 없으면 키워드만 검색
+    const searchCombos = filters.length > 0
+      ? filters.flatMap(f => keywords.map(kw => ({ main: f, sub: kw })))
+      : keywords.map(kw => ({ main: kw, sub: null }));
+    const promises = searchCombos.flatMap(({ main, sub }) =>
       dateChunks.map(({ csd, ced }) => {
-        let url = `${endpoint}?keyword=${encodeURIComponent(kw)}&startDt=${csd}&endDt=${ced}`;
-        if (filters.length > 0) url += `&filter=${encodeURIComponent(filters.join('|'))}`;
+        let url = `${endpoint}?keyword=${encodeURIComponent(main)}&startDt=${csd}&endDt=${ced}`;
+        if (sub) url += `&filter=${encodeURIComponent(sub)}`;
         return fetch(url)
         .then(r=>r.json())
         .then(d=>{ kwCounts[kw]=(d.items||[]).length; return d.items||[]; })
