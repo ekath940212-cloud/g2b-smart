@@ -35,14 +35,7 @@ export default async function handler(req, res) {
         .catch(() => []);
     });
     let items = (await Promise.all(fetches)).flat();
-    // 2차 필터 (filter 파라미터가 있으면 공고명에 포함된 것만)
-    if (filter) {
-      const filters = filter.split('|');
-      items = items.filter(item => {
-        const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g, '');
-        return filters.some(f => nm.includes(f.toLowerCase().replace(/\s/g, '')));
-      });
-    }
+    // 2차 필터 없음 - 프론트에서 처리
     // 중복 제거
     const seen = new Set();
     items = items.filter(item => {
