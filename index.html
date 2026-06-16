@@ -574,7 +574,7 @@ async function startSearch(){
         if (sub) url += `&filter=${encodeURIComponent(sub)}`;
         return fetch(url)
         .then(r=>r.json())
-        .then(d=>{ kwCounts[kw]=(d.items||[]).length; return d.items||[]; })
+        .then(d=>{ kwCounts[main]=(d.items||[]).length; return d.items||[]; })
         .catch(()=>[]);
       })
     );
