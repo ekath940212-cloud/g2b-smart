@@ -571,7 +571,8 @@ async function startSearch(){
         .then(r=>r.json())
         .then(d=>{ kwCounts[kw]=(d.items||[]).length; return d.items||[]; })
         .catch(()=>[]);
-    });
+      })
+    );
     let raw = (await Promise.all(promises)).flat();
 
     // 2차 필터는 서버(search.js)에서 처리
