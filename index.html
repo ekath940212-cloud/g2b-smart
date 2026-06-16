@@ -660,7 +660,7 @@ function renderCards(items){
     const closeD=(item.bidClseDt||'').slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/,'$1.$2.$3')||'-';
     const ntceD=(item.ntceDt||item.bidNtceDt||'').slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/,'$1.$2.$3');
     const ntceNo=item.bidNtceNo||item.ntceNo||'';
-    const g2bUrl=ntceNo?`https://www.g2b.go.kr:8101/ep/invitation/publish/bidInvitDtls.do?bidno=${ntceNo.split('-')[0]}&bidseq=${ntceNo.split('-')[1]||'00'}`:'#';
+    const g2bUrl=ntceNo`https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=/pt/menu/frameTgong.do?url=https://www.g2b.go.kr:8101/ep/tbid/tbBidList.do?bidno=${encodeURIComponent(ntceNo)}`:'https://www.g2b.go.kr/';
     const sn=notes[ntceNo||title]||'';
     const status=statuses[ntceNo||title]||'';
     const statusClass={'참여예정':'s-plan','미참여':'s-skip','낙찰':'s-win','유찰':'s-fail','취소':'s-cancel'}[status]||'';
