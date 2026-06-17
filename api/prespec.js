@@ -36,27 +36,33 @@ export default async function handler(req, res) {
 
     const r = await fetch('https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Referer': 'https://www.g2b.go.kr/',
+        'Origin': 'https://www.g2b.go.kr',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
       body: JSON.stringify(body),
     });
 
     const data = await r.json();
 
-    const list = data?.result || data?.data || data?.list || [];
+    // 나라장터 응답 구조: { dlOderReqL: [...], ErrorMsg: "정상적으로 조회되었습니다." }
+    const list = data?.dlOderReqL || data?.result || data?.data || data?.list || [];
 
     const items = list.map(item => ({
       _isPreSpec: true,
       bidNtceNm: item.bizNm || item.oderReqNm || '',
-      ntceInsttNm: item.oderInstNm || item.pbancInstNm || '',
-      dminsttNm: item.oderInstNm || '',
-      asignBdgtAmt: item.oderPlanAmt || item.budgAmt || null,
-      ntceDt: item.prgrsBgngYmd || item.regDt || '',
+      ntceInsttNm: item.oderInstUntyGrpNm || item.oderInstNm || item.tkcgDeptNm || '',
+      dminsttNm: item.oderInstUntyGrpNm || item.oderInstNm || '',
+      asignBdgtAmt: item.bgtSumAmt || item.oderPlanAmt || null,
+      ntceDt: item.prcsYmd || item.prgrsBgngYmd || '',
       bidClseDt: item.prgrsEndYmd || '',
-      prcrmntReqNo: item.oderReqNo || '',
+      prcrmntReqNo: item.oderPlanNo || item.unikey || '',
       raw_data: item,
     }));
 
-    res.status(200).json({ items, totalCount: items.length });
+    res.status(200).json({ items, totalCount: data?.dlOderReqL?.length || items.length, g2bTotal: list[0]?.totCnt || items.length });
   } catch(e) {
     res.status(500).json({ error: e.message });
   }
