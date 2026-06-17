@@ -9,43 +9,47 @@ export default async function handler(req, res) {
   const { keyword, startDt, endDt } = req.query;
   if (!keyword) return res.status(400).json({ error: 'keyword 필요' });
 
-  const sd = (startDt || '20260101').replace(/-/g, '');
-  const ed = (endDt || '20261231').replace(/-/g, '');
+  const sd = (startDt || '20260101').replace(/-/g, '') + '0000';
+  const ed = (endDt || '20261231').replace(/-/g, '') + '2359';
 
-  // 사전규격정보서비스 엔드포인트 (용역, 공사, 물품)
+  // 공공데이터포털 사전규격정보서비스
   const BASE = 'https://apis.data.go.kr/1230000/ao/HrcspSsstndrdInfoService';
   const endpoints = [
-    `${BASE}/getPublicPrcureThngInfoServcPPSSrch`,
-    `${BASE}/getPublicPrcureThngInfoCnstwkPPSSrch`,
-    `${BASE}/getPublicPrcureThngInfoThngPPSSrch`,
+    'getPublicPrcureThngInfoServcPPSSrch',  // 용역
+    'getPublicPrcureThngInfoCnstwkPPSSrch', // 공사
+    'getPublicPrcureThngInfoThngPPSSrch',   // 물품
   ];
-
-  const params = new URLSearchParams({
-    serviceKey: G2B_API_KEY,
-    numOfRows: '100',
-    pageNo: '1',
-    type: 'json',
-    bidNtceBgnDt: sd + '0000',
-    bidNtceEndDt: ed + '2359',
-    prdctClsfcNoNm: keyword,
-  });
 
   const allItems = [];
   const debugInfo = [];
 
   for (const ep of endpoints) {
     try {
-      const r = await fetch(`${ep}?${params.toString()}`);
+      const url = new URL(`${BASE}/${ep}`);
+      url.searchParams.set('serviceKey', G2B_API_KEY);
+      url.searchParams.set('numOfRows', '100');
+      url.searchParams.set('pageNo', '1');
+      url.searchParams.set('type', 'json');
+      url.searchParams.set('inqryBgnDt', sd);
+      url.searchParams.set('inqryEndDt', ed);
+      url.searchParams.set('prdctClsfcNoNm', keyword);
+
+      const r = await fetch(url.toString());
       const rawText = await r.text();
-      debugInfo.push({ ep, status: r.status, raw: rawText.substring(0, 300) });
-      
+      debugInfo.push({ ep, status: r.status, raw: rawText.substring(0, 400) });
+
+      if (!rawText || rawText.startsWith('Forbidden') || r.status !== 200) continue;
+
       let d;
       try { d = JSON.parse(rawText); } catch(e) { continue; }
-      
+
       const body = d?.response?.body;
+      const resultCode = d?.response?.header?.resultCode;
+      if (resultCode !== '00' && resultCode !== '0000') continue;
+
       const items = body?.items?.item;
       if (!items) continue;
-      
+
       const list = Array.isArray(items) ? items : [items];
       list.forEach(item => {
         allItems.push({
@@ -65,7 +69,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // 중복 제거 (prcrmntReqNo 기준)
+  // 중복 제거
   const seen = new Set();
   const unique = allItems.filter(item => {
     const key = item.prcrmntReqNo || item.bidNtceNm;
