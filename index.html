@@ -549,6 +549,12 @@ async function startSearch(){
     const keywords=Array.from(selKw);
     // Vercel 서버리스 API 호출 (CORS 해결)
     const endpoint = '/api/search';
+    // 사전규격공개는 별도 API 호출
+    if (searchType === 'pre') {
+      await startPreSearch(sd, ed);
+      return;
+    }
+
     const filters = Array.from(selFil);
     const dateChunks = [];
     let chunkCur = new Date(sd.slice(0,4)+'-'+sd.slice(4,6)+'-'+sd.slice(6,8));
@@ -604,6 +610,33 @@ async function startSearch(){
     btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
     document.getElementById('loadBar').classList.remove('on');
   }
+}
+
+async function startPreSearch(sd, ed) {
+  const keywords = Array.from(selKw);
+  const promises = keywords.map(kw =>
+    fetch(`/api/prespec?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`)
+      .then(r => r.json())
+      .then(data => { const items=(data.items||[]).map(i=>({...i,_kw:kw})); kwCounts[kw]=items.length; return items; })
+      .catch(() => { kwCounts[kw]=0; return []; })
+  );
+  let raw = (await Promise.all(promises)).flat();
+  // 중복 제거
+  const seen = new Set();
+  raw = raw.filter(item => {
+    const id = item.prcrmntReqNo || JSON.stringify(item).slice(0,50);
+    if (seen.has(id)) return false; seen.add(id); return true;
+  });
+  // 업무유형 필터
+  if (selFil.size > 0) {
+    raw = raw.filter(item => {
+      const nm = (item.prdctClsfcNoNm || item.bsnsSumryCn || '').toLowerCase().replace(/\s/g,'');
+      return Array.from(selKw).some(kw => nm.includes(kw.toLowerCase().replace(/\s/g,'')));
+    });
+  }
+  allResults = raw;
+  renderKw();
+  renderResults();
 }
 
 // ===== 결과 렌더 =====
