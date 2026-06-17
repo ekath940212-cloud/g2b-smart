@@ -12,51 +12,52 @@ export default async function handler(req, res) {
   const sd = startDt || '20250101';
   const ed = endDt || '20261231';
 
-  // 사전규격공개 API: 나라장터 공공데이터 사전공개 정보 서비스
-  // 입찰공고 사전규격공개 목록 엔드포인트
-  const endpoints = [
-    'https://apis.data.go.kr/1230000/ao/BidPublicInfoService/getBidPblancListInfoServcPPSSrch',
+  // 사전규격공개 API 후보 엔드포인트들 순서대로 시도
+  const candidateUrls = [
+    'https://apis.data.go.kr/1230000/ad/PrePbancService/getPrePbancList',
+    'https://apis.data.go.kr/1230000/ad/BidPublicInfoService/getBidPblancListInfoServcPPSSrch',
   ];
 
-  try {
-    // 사전규격공개 전용 API 엔드포인트 시도
-    const url = new URL('https://apis.data.go.kr/1230000/ao/PlanPublicInfoService/getPlanlnfoList');
-    url.searchParams.set('serviceKey', G2B_API_KEY);
-    url.searchParams.set('numOfRows', '100');
-    url.searchParams.set('pageNo', '1');
-    url.searchParams.set('type', 'json');
-    url.searchParams.set('inqryBgnDt', sd);
-    url.searchParams.set('inqryEndDt', ed);
-    url.searchParams.set('prdctClsfcNoNm', keyword);
+  for (const baseUrl of candidateUrls) {
+    try {
+      const url = new URL(baseUrl);
+      url.searchParams.set('serviceKey', G2B_API_KEY);
+      url.searchParams.set('numOfRows', '100');
+      url.searchParams.set('pageNo', '1');
+      url.searchParams.set('type', 'json');
+      url.searchParams.set('inqryBgnDt', sd + '0000');
+      url.searchParams.set('inqryEndDt', ed + '2359');
+      url.searchParams.set('bidNtceNm', keyword);
 
-    const r = await fetch(url.toString());
-    const rawText = await r.text();
+      const r = await fetch(url.toString());
+      const rawText = await r.text();
 
-    let d;
-    try { d = JSON.parse(rawText); }
-    catch(parseErr) {
-      return res.status(500).json({
-        error: 'API parse error',
-        raw: rawText.substring(0, 300),
-        url: url.toString().replace(G2B_API_KEY, 'HIDDEN')
+      if (rawText.includes('API not found')) continue; // 다음 후보 시도
+
+      let d;
+      try { d = JSON.parse(rawText); }
+      catch(e) {
+        return res.status(500).json({ error: 'parse error', raw: rawText.substring(0, 200), endpoint: baseUrl });
+      }
+
+      const body = d?.response?.body;
+      const items = body?.items?.item || body?.items;
+      const list = !items ? [] : Array.isArray(items) ? items : [items];
+
+      const filtered = list.filter(item => {
+        const nm = (item.bidNtceNm || item.prdctClsfcNoNm || item.bsnsSumryCn || '').toLowerCase();
+        return nm.includes(keyword.toLowerCase());
       });
+
+      return res.status(200).json({
+        items: filtered.map(i => ({ ...i, _isPreSpec: true })),
+        totalCount: filtered.length,
+        _endpoint: baseUrl
+      });
+    } catch(e) {
+      continue;
     }
-
-    const body = d?.response?.body;
-    const items = body?.items?.item || body?.items;
-    const list = !items ? [] : Array.isArray(items) ? items : [items];
-
-    const filtered = list.filter(item => {
-      const nm = (item.prdctClsfcNoNm || item.bsnsSumryCn || item.bidNtceNm || '').toLowerCase();
-      return nm.includes(keyword.toLowerCase());
-    });
-
-    res.status(200).json({
-      items: filtered.map(i => ({ ...i, _isPreSpec: true })),
-      totalCount: filtered.length,
-      _debug_total: list.length
-    });
-  } catch(e) {
-    res.status(500).json({ error: e.message });
   }
+
+  res.status(500).json({ error: '모든 사전규격 엔드포인트 실패' });
 }
