@@ -222,13 +222,12 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <span style="font-size:15px;font-weight:700;letter-spacing:-0.3px">나라장터 스마트 검색</span>
   </div>
   <div class="hdr-r">
-    <div class="api-pill"><div class="api-dot" id="apiDot"></div><span id="apiTxt">API 키 필요</span></div>
-    <button class="btn-sm" onclick="openModal('apiModal')">⚙ API 키</button>
+    <div class="api-pill"><div class="api-dot" style="background:var(--green)"></div><span>서비스 정상</span></div>
   </div>
 </header>
 
 <!-- API 모달 -->
-<div class="modal-bg" id="apiModal">
+<div class="modal-bg" id="apiModal" style="display:none!important">
   <div class="modal">
     <div class="modal-ttl">API 키 설정</div>
     <div class="modal-desc">공공데이터포털(data.go.kr)에서 발급받은 <strong>일반 인증키(Encoding)</strong>를 입력하세요.<br>키는 브라우저 로컬스토리지에만 저장됩니다.</div>
@@ -534,8 +533,6 @@ function getRange(){
 
 // ===== 검색 =====
 async function startSearch(){
-  const apiKey=localStorage.getItem('g2b_api');
-  if(!apiKey){ openModal('apiModal'); showToast('먼저 API 키를 입력하세요'); return; }
   if(selKw.size===0){ showToast('키워드를 1개 이상 선택하세요'); return; }
 
   const btn=document.getElementById('searchBtn');
