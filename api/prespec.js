@@ -3,78 +3,76 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const G2B_API_KEY = process.env.G2B_API_KEY;
+  if (!G2B_API_KEY) return res.status(500).json({ error: 'API 키 누락' });
+
   const { keyword, startDt, endDt } = req.query;
   if (!keyword) return res.status(400).json({ error: 'keyword 필요' });
 
-  const sd = startDt || '20260101';
-  const ed = endDt || '20261231';
+  const sd = (startDt || '20260101').replace(/-/g, '');
+  const ed = (endDt || '20261231').replace(/-/g, '');
 
-  try {
-    const body = {
-      dlOderReqSrchM: {
-        srchTy: '0002',
-        bizNm: keyword,
-        picNm: '',
-        stepCd: '',
-        prssCd: '',
-        oderInstUntyGrpNo: '',
-        oderInstUntyGrpNm: '',
-        pbancInstUntyGrpNo: '',
-        pbancInstUntyGrpNm: '',
-        instSearchRangeYn: '',
-        pbancSearchRangeYn: '',
-        prgrsBgngYmd: sd,
-        prgrsEndYmd: ed,
-        currentPage: 1,
-        recordCountPerPage: '100',
-        preSrchTy: '',
-        oderPlanPgstCd: '',
-        srchTyNm: '',
-        tkcgSe: '',
-      }
-    };
+  // 사전규격정보서비스 엔드포인트 (용역, 공사, 물품)
+  const BASE = 'https://apis.data.go.kr/1230000/ao/HrcspSsstndrdInfoService';
+  const endpoints = [
+    `${BASE}/getPublicPrcureThngInfoServcPPSSrch`,
+    `${BASE}/getPublicPrcureThngInfoCnstwkPPSSrch`,
+    `${BASE}/getPublicPrcureThngInfoThngPPSSrch`,
+  ];
 
-    const r = await fetch('https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Referer': 'https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do',
-        'Origin': 'https://www.g2b.go.kr',
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Language': 'ko-KR,ko;q=0.9',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
-      },
-      body: JSON.stringify(body),
-    });
+  const params = new URLSearchParams({
+    serviceKey: G2B_API_KEY,
+    numOfRows: '100',
+    pageNo: '1',
+    type: 'json',
+    bidNtceBgnDt: sd + '0000',
+    bidNtceEndDt: ed + '2359',
+    prdctClsfcNoNm: keyword,
+  });
 
-    const rawText = await r.text();
-    
-    // 디버그: status와 raw response 포함
-    if (r.status !== 200) {
-      return res.status(200).json({ debug_status: r.status, debug_raw: rawText.substring(0, 500), items: [], totalCount: 0 });
+  const allItems = [];
+  const debugInfo = [];
+
+  for (const ep of endpoints) {
+    try {
+      const r = await fetch(`${ep}?${params.toString()}`);
+      const rawText = await r.text();
+      debugInfo.push({ ep, status: r.status, raw: rawText.substring(0, 300) });
+      
+      let d;
+      try { d = JSON.parse(rawText); } catch(e) { continue; }
+      
+      const body = d?.response?.body;
+      const items = body?.items?.item;
+      if (!items) continue;
+      
+      const list = Array.isArray(items) ? items : [items];
+      list.forEach(item => {
+        allItems.push({
+          _isPreSpec: true,
+          bidNtceNm: item.prdctClsfcNoNm || item.bidNtceNm || '',
+          ntceInsttNm: item.ntceInsttNm || item.dminsttNm || '',
+          dminsttNm: item.dminsttNm || item.ntceInsttNm || '',
+          asignBdgtAmt: item.asignBdgtAmt || null,
+          ntceDt: item.bidNtceDt || item.rgstDt || '',
+          bidClseDt: item.opngDt || '',
+          prcrmntReqNo: item.prcrmntReqNo || item.ssstndrdNo || '',
+          raw_data: item,
+        });
+      });
+    } catch(e) {
+      debugInfo.push({ ep, error: e.message });
     }
-
-    let data;
-    try { data = JSON.parse(rawText); } catch(e) {
-      return res.status(200).json({ debug_parse_error: e.message, debug_raw: rawText.substring(0, 500), items: [], totalCount: 0 });
-    }
-
-    const list = data?.dlOderReqL || data?.result || data?.data || data?.list || [];
-
-    const items = list.map(item => ({
-      _isPreSpec: true,
-      bidNtceNm: item.bizNm || item.oderReqNm || '',
-      ntceInsttNm: item.oderInstUntyGrpNm || item.oderInstNm || item.tkcgDeptNm || '',
-      dminsttNm: item.oderInstUntyGrpNm || item.oderInstNm || '',
-      asignBdgtAmt: item.bgtSumAmt || item.oderPlanAmt || null,
-      ntceDt: item.prcsYmd || item.prgrsBgngYmd || '',
-      bidClseDt: item.prgrsEndYmd || '',
-      prcrmntReqNo: item.oderPlanNo || item.unikey || '',
-      raw_data: item,
-    }));
-
-    res.status(200).json({ items, totalCount: items.length, g2bTotal: list[0]?.totCnt || items.length, debug_keys: Object.keys(data) });
-  } catch(e) {
-    res.status(500).json({ error: e.message, stack: e.stack });
   }
+
+  // 중복 제거 (prcrmntReqNo 기준)
+  const seen = new Set();
+  const unique = allItems.filter(item => {
+    const key = item.prcrmntReqNo || item.bidNtceNm;
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  res.status(200).json({ items: unique, totalCount: unique.length, debugInfo });
 }
