@@ -38,16 +38,27 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Referer': 'https://www.g2b.go.kr/',
+        'Referer': 'https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do',
         'Origin': 'https://www.g2b.go.kr',
-        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'ko-KR,ko;q=0.9',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
       },
       body: JSON.stringify(body),
     });
 
-    const data = await r.json();
+    const rawText = await r.text();
+    
+    // 디버그: status와 raw response 포함
+    if (r.status !== 200) {
+      return res.status(200).json({ debug_status: r.status, debug_raw: rawText.substring(0, 500), items: [], totalCount: 0 });
+    }
 
-    // 나라장터 응답 구조: { dlOderReqL: [...], ErrorMsg: "정상적으로 조회되었습니다." }
+    let data;
+    try { data = JSON.parse(rawText); } catch(e) {
+      return res.status(200).json({ debug_parse_error: e.message, debug_raw: rawText.substring(0, 500), items: [], totalCount: 0 });
+    }
+
     const list = data?.dlOderReqL || data?.result || data?.data || data?.list || [];
 
     const items = list.map(item => ({
@@ -62,8 +73,8 @@ export default async function handler(req, res) {
       raw_data: item,
     }));
 
-    res.status(200).json({ items, totalCount: data?.dlOderReqL?.length || items.length, g2bTotal: list[0]?.totCnt || items.length });
+    res.status(200).json({ items, totalCount: items.length, g2bTotal: list[0]?.totCnt || items.length, debug_keys: Object.keys(data) });
   } catch(e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: e.message, stack: e.stack });
   }
 }
