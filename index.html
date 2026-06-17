@@ -703,7 +703,7 @@ function renderCards(items){
           <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           나라장터 바로가기
         </a>
-        ${ntceNo ? `<button class="note-save" onclick="navigator.clipboard.writeText('${esc(ntceNo)}').then(()=>showToast('공고번호 복사됨: ${esc(ntceNo)}'))" title="공고번호 복사">📋 ${esc(ntceNo)}</button>` : ''}
+        ${ntceNo ? '<button class="note-save" onclick="navigator.clipboard.writeText(&#39;'+esc(ntceNo)+'&#39;).then(()=>showToast(&#39;공고번호 복사됨: '+esc(ntceNo)+'&#39;))" title="공고번호 복사">📋 '+esc(ntceNo)+'</button>' : ''}
         <span class="note-lbl">비고</span>
         <input class="note-inp" id="note-${idx}" value="${esc(sn)}" placeholder="낙찰사, 경쟁사, 메모 등..."/>
         <button class="note-save" onclick="saveNote('${esc(ntceNo||title)}',${idx})">저장</button>
