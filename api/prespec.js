@@ -3,80 +3,86 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const G2B_API_KEY = process.env.G2B_API_KEY;
-  if (!G2B_API_KEY) return res.status(500).json({ error: 'API 키 누락' });
-
   const { keyword, startDt, endDt } = req.query;
   if (!keyword) return res.status(400).json({ error: 'keyword 필요' });
 
-  const sd = (startDt || '20260101').replace(/-/g, '') + '0000';
-  const ed = (endDt || '20261231').replace(/-/g, '') + '2359';
+  const sd = (startDt || '20260101').replace(/-/g, '');
+  const ed = (endDt || '20261231').replace(/-/g, '');
 
-  // 공공데이터포털 사전규격정보서비스
-  const BASE = 'https://apis.data.go.kr/1230000/ao/HrcspSsstndrdInfoService';
-  const endpoints = [
-    'getPublicPrcureThngInfoServcPPSSrch',  // 용역
-    'getPublicPrcureThngInfoCnstwkPPSSrch', // 공사
-    'getPublicPrcureThngInfoThngPPSSrch',   // 물품
-  ];
+  try {
+    const body = {
+      dlOderReqSrchM: {
+        srchTy: '0002',
+        bizNm: keyword,
+        picNm: '',
+        stepCd: '',
+        prssCd: '',
+        oderInstUntyGrpNo: '',
+        oderInstUntyGrpNm: '',
+        pbancInstUntyGrpNo: '',
+        pbancInstUntyGrpNm: '',
+        instSearchRangeYn: '',
+        pbancSearchRangeYn: '',
+        prgrsBgngYmd: sd,
+        prgrsEndYmd: ed,
+        currentPage: 1,
+        recordCountPerPage: '100',
+        preSrchTy: '',
+        oderPlanPgstCd: '',
+        srchTyNm: '',
+        tkcgSe: '',
+      }
+    };
 
-  const allItems = [];
-  const debugInfo = [];
+    const menuInfo = JSON.stringify({
+      menuNo: '13713',
+      menuCangVal: 'PRCA001_04',
+      bsneClsfCd: '%EC%97%85130025',
+      scrnNo: '00963'
+    });
 
-  for (const ep of endpoints) {
-    try {
-      const url = new URL(`${BASE}/${ep}`);
-      url.searchParams.set('serviceKey', G2B_API_KEY);
-      url.searchParams.set('numOfRows', '100');
-      url.searchParams.set('pageNo', '1');
-      url.searchParams.set('type', 'json');
-      url.searchParams.set('inqryBgnDt', sd);
-      url.searchParams.set('inqryEndDt', ed);
-      url.searchParams.set('prdctClsfcNoNm', keyword);
+    const r = await fetch('https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/plain, */*',
+        'submissionid': 'mf_wfm_container_smSearchOderReqLstList',
+        'Menu-Info': menuInfo,
+        'Target-Id': 'btnS0001',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Referer': 'https://www.g2b.go.kr/pr/prc/prca/OderReq/selectOderReqList.do',
+        'Origin': 'https://www.g2b.go.kr',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+      },
+      body: JSON.stringify(body),
+    });
 
-      const r = await fetch(url.toString());
-      const rawText = await r.text();
-      debugInfo.push({ ep, status: r.status, raw: rawText.substring(0, 400) });
+    const rawText = await r.text();
 
-      if (!rawText || rawText.startsWith('Forbidden') || r.status !== 200) continue;
-
-      let d;
-      try { d = JSON.parse(rawText); } catch(e) { continue; }
-
-      const body = d?.response?.body;
-      const resultCode = d?.response?.header?.resultCode;
-      if (resultCode !== '00' && resultCode !== '0000') continue;
-
-      const items = body?.items?.item;
-      if (!items) continue;
-
-      const list = Array.isArray(items) ? items : [items];
-      list.forEach(item => {
-        allItems.push({
-          _isPreSpec: true,
-          bidNtceNm: item.prdctClsfcNoNm || item.bidNtceNm || '',
-          ntceInsttNm: item.ntceInsttNm || item.dminsttNm || '',
-          dminsttNm: item.dminsttNm || item.ntceInsttNm || '',
-          asignBdgtAmt: item.asignBdgtAmt || null,
-          ntceDt: item.bidNtceDt || item.rgstDt || '',
-          bidClseDt: item.opngDt || '',
-          prcrmntReqNo: item.prcrmntReqNo || item.ssstndrdNo || '',
-          raw_data: item,
-        });
-      });
-    } catch(e) {
-      debugInfo.push({ ep, error: e.message });
+    if (r.status !== 200) {
+      return res.status(200).json({ debug_status: r.status, debug_raw: rawText.substring(0, 300), items: [], totalCount: 0 });
     }
+
+    let data;
+    try { data = JSON.parse(rawText); }
+    catch(e) { return res.status(200).json({ debug_parse_error: e.message, debug_raw: rawText.substring(0, 300), items: [], totalCount: 0 }); }
+
+    const list = data?.dlOderReqL || [];
+
+    const items = list.map(item => ({
+      _isPreSpec: true,
+      bidNtceNm: item.bizNm || '',
+      ntceInsttNm: item.oderInstUntyGrpNm || item.tkcgDeptNm || '',
+      dminsttNm: item.oderInstUntyGrpNm || '',
+      asignBdgtAmt: item.bgtSumAmt || null,
+      ntceDt: item.prcsYmd || '',
+      bidClseDt: item.prgrsEndYmd || '',
+      prcrmntReqNo: item.oderPlanNo || item.unikey || '',
+      raw_data: item,
+    }));
+
+    res.status(200).json({ items, totalCount: items.length, g2bTotal: list[0]?.totCnt || items.length });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
   }
-
-  // 중복 제거
-  const seen = new Set();
-  const unique = allItems.filter(item => {
-    const key = item.prcrmntReqNo || item.bidNtceNm;
-    if (!key || seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  res.status(200).json({ items: unique, totalCount: unique.length, debugInfo });
 }
