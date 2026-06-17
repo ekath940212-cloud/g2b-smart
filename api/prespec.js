@@ -23,12 +23,18 @@ export default async function handler(req, res) {
     url.searchParams.set('prdctClsfcNoNm', keyword);
 
     const r = await fetch(url.toString());
-    const d = await r.json();
+    const rawText = await r.text();
+
+    let d;
+    try { d = JSON.parse(rawText); }
+    catch(parseErr) {
+      return res.status(500).json({ error: 'API parse error', raw: rawText.substring(0, 300), url: url.toString().replace(G2B_API_KEY, 'HIDDEN') });
+    }
+
     const body = d?.response?.body;
     const items = body?.items?.item || body?.items;
     const list = !items ? [] : Array.isArray(items) ? items : [items];
 
-    // 키워드 필터링 (공고명에 keyword 포함된 것만)
     const filtered = list.filter(item => {
       const nm = (item.prdctClsfcNoNm || item.bsnsSumryCn || '').toLowerCase();
       return nm.includes(keyword.toLowerCase());
