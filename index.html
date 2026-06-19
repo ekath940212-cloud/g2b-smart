@@ -628,11 +628,11 @@ async function startPreSearch(sd, ed) {
 
     await navigator.clipboard.writeText(kwText);
 
-    showToast('키워드 복사 완료! 나라장터에서 붙여넣기 하세요');
+    showToast('Keywords copied! Paste in Nara Jangter');
 
   } catch(e) {
 
-    showToast('키워드: ' + kwText);
+    showToast('Keywords: ' + kwText);
 
   }
 
@@ -654,23 +654,23 @@ async function startPreSearch(sd, ed) {
 
     <div class="empty-icon">📌</div>
 
-    <div class="empty-title">사전규격공개 안내</div>
+    <div class="empty-title">&#49324;&#51204;&#44508;&#44201;&#44277;&#44060; &#50504;&#45236;</div>
 
     <div class="empty-desc">
 
-      나라장터가 새 탭으로 열렸어요.<br><br>
+      &#45208;&#46972;&#51109;&#53552;&#44032; &#49352; &#53469;&#51004;&#47196; &#50672;&#47838;&#50612;&#50836;.<br><br>
 
-      <strong>① 발주 → 발주목록 → 사전규격공개 탭 클릭</strong><br>
+      <strong>&#9312; &#48156;&#51452; &rarr; &#48156;&#51452;&#47785;&#47197; &rarr; &#49324;&#51204;&#44508;&#44201;&#44277;&#44060; &#53468; &#53364;&#47¿;</strong><br>
 
-      <strong>② 사업명에 아래 키워드 붙여넣기 (Ctrl+V)</strong><br><br>
+      <strong>&#9313; &#49324;&#50629;&#47749;&#50640; &#50500;&#47000; &#53412;&#50892;&#46300; &#48513;&#50668;&#45397;&#44592; (Ctrl+V)</strong><br><br>
 
       <span style="background:var(--blue-l);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600">${esc(kwText)}</span><br><br>
 
-      <button onclick="navigator.clipboard.writeText('${esc(kwText)}').then(()=>showToast('복사됨!'))" 
+      <button onclick="navigator.clipboard.writeText('${esc(kwText)}').then(()=>showToast('Copied!'))" 
 
         style="margin-top:8px;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-md);font-size:13px;cursor:pointer">
 
-        📋 키워드 다시 복사
+        📋 &#53412;&#50892;&#46300; &#45796;&#49884; &#48373;&#49324;
 
       </button>
 
