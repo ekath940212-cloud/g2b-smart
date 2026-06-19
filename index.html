@@ -613,85 +613,51 @@ async function startSearch(){
 }
 
 async function startPreSearch(sd, ed) {
-
-  // 사전규격공개는 나라장터 내부 세션 API라 직접 호출 불가
-
-  // 선택된 키워드를 클립보드에 복사하고 나라장터로 이동
-
+  // Pre-spec is Nara Jangter internal session API - cannot call directly
   const keywords = Array.from(selKw);
-
   const kwText = keywords.join(', ');
-
-  
-
   try {
-
     await navigator.clipboard.writeText(kwText);
-
     showToast('Keywords copied! Paste in Nara Jangter');
-
   } catch(e) {
-
     showToast('Keywords: ' + kwText);
-
   }
-
-  
-
-  // 나라장터 발주목록(사전규격공개) 페이지 열기
-
   window.open('https://www.g2b.go.kr/', '_blank');
-
-  
-
-  // 안내 메시지 표시
-
   allResults = [];
-
-  document.getElementById('emptyState').style.display = 'block';
-
-  document.getElementById('emptyState').innerHTML = `
-
-    <div class="empty-icon">📌</div>
-
-    <div class="empty-title">&#49324;&#51204;&#44508;&#44201;&#44277;&#44060; &#50504;&#45236;</div>
-
-    <div class="empty-desc">
-
-      &#45208;&#46972;&#51109;&#53552;&#44032; &#49352; &#53469;&#51004;&#47196; &#50672;&#47838;&#50612;&#50836;.<br><br>
-
-      <strong>&#9312; &#48156;&#51452; &rarr; &#48156;&#51452;&#47785;&#47197; &rarr; &#49324;&#51204;&#44508;&#44201;&#44277;&#44060; &#53468; &#53364;&#47533;</strong><br>
-
-      <strong>&#9313; &#49324;&#50629;&#47749;&#50640; &#50500;&#47000; &#53412;&#50892;&#46300; &#48513;&#50668;&#45397;&#44592; (Ctrl+V)</strong><br><br>
-
-      <span style="background:var(--blue-l);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600">${esc(kwText)}</span><br><br>
-
-      <button onclick="navigator.clipboard.writeText('${esc(kwText)}').then(()=>showToast('Copied!'))" 
-
-        style="margin-top:8px;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-md);font-size:13px;cursor:pointer">
-
-        📋 &#53412;&#50892;&#46300; &#45796;&#49884; &#48373;&#49324;
-
-      </button>
-
-    </div>
-
-  `;
-
+  const emptyEl = document.getElementById('emptyState');
+  emptyEl.style.display = 'block';
+  emptyEl.innerHTML = '';
+  const iconDiv = document.createElement('div');
+  iconDiv.className = 'empty-icon';
+  iconDiv.textContent = '\uD83D\uDCCC';
+  emptyEl.appendChild(iconDiv);
+  const titleDiv = document.createElement('div');
+  titleDiv.className = 'empty-title';
+  titleDiv.textContent = '\uC0AC\uC804\uADDC\uACA9\uACF5\uAC1C \uC548\uB0B4';
+  emptyEl.appendChild(titleDiv);
+  const descDiv = document.createElement('div');
+  descDiv.className = 'empty-desc';
+  const p1 = document.createElement('p');
+  p1.innerHTML = '\uB098\uB77C\uC7A5\uD130\uAC00 \uC0C8 \uD0ED\uC73C\uB85C \uC5F4\uB838\uC5B4\uC694.<br><br>' +
+    '<strong>\u2460 \uBC1C\uC8FC &rarr; \uBC1C\uC8FC\uBAA9\uB85D &rarr; \uC0AC\uC804\uADDC\uACA9\uACF5\uAC1C \uD0ED \uD074\uB9AD</strong><br>' +
+    '<strong>\u2461 \uC0AC\uC5C5\uBA85\uC5D0 \uC544\uB798 \uD0A4\uC6CC\uB4DC \uBD99\uC5EC\uB123\uAE30 (Ctrl+V)</strong>';
+  descDiv.appendChild(p1);
+  const kwSpan = document.createElement('span');
+  kwSpan.style.cssText = 'background:var(--blue-l);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;display:inline-block;margin:8px 0';
+  kwSpan.textContent = kwText;
+  descDiv.appendChild(kwSpan);
+  const copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'display:block;margin-top:8px;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-md);font-size:13px;cursor:pointer';
+  copyBtn.textContent = '\uD83D\uDCCB \uD0A4\uC6CC\uB4DC \uB2E4\uC2DC \uBCF5\uC0AC';
+  copyBtn.onclick = () => navigator.clipboard.writeText(kwText).then(() => showToast('Copied!'));
+  descDiv.appendChild(copyBtn);
+  emptyEl.appendChild(descDiv);
   document.getElementById('statsRow').style.display = 'none';
-
   document.getElementById('resultArea').style.display = 'none';
-
-  
-
   btn.disabled = false;
-
-  btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
-
+  btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> \uC804\uCCB4 \uAC80\uC0C9';
   document.getElementById('loadBar').classList.remove('on');
-
   return;
-
 }
 
 // ===== ê²°ê³¼ ë ë =====
