@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나라장터 스마트 검색</title>
+<title>ëë¼ì¥í° ì¤ë§í¸ ê²ì</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -29,13 +29,13 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 
 .wrap{max-width:1200px;margin:0 auto;padding:20px 24px;}
 
-/* 광고 */
+/* ê´ê³  */
 .ad-top{background:linear-gradient(135deg,#f8faff,#eef2ff);border:1px solid #c7d7fe;border-radius:var(--r-md);padding:9px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .ad-lbl{font-size:10px;color:#818cf8;font-weight:700;letter-spacing:0.5px;white-space:nowrap;}
 .ad-txt{flex:1;text-align:center;font-size:12px;color:#4338ca;}
 .ad-x{font-size:16px;color:var(--th);cursor:pointer;padding:2px 5px;}
 
-/* 이메일 */
+/* ì´ë©ì¼ */
 .email-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 20px;margin-bottom:14px;}
 .panel-ttl{font-size:11px;font-weight:700;color:var(--th);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;}
 .email-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -43,13 +43,13 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .email-inp:focus{border-color:var(--blue-m);}
 .email-desc{font-size:11px;color:var(--th);margin-top:6px;}
 
-/* 검색유형 탭 */
+/* ê²ìì í í­ */
 .stype-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);width:fit-content;}
 .stype-btn{padding:8px 24px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--surface);color:var(--ts);transition:all 0.15s;border-right:1px solid var(--border);}
 .stype-btn:last-child{border-right:none;}
 .stype-btn.active{background:var(--blue);color:#fff;}
 
-/* 검색 패널 */
+/* ê²ì í¨ë */
 .sp{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 22px;margin-bottom:14px;}
 .sp-ttl{font-size:11px;font-weight:700;color:var(--th);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
 .row-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
@@ -81,7 +81,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .btn-sm{padding:7px 12px;background:var(--surface);color:var(--ts);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;cursor:pointer;}
 .btn-sm:hover{background:var(--gray);}
 
-/* 기간 */
+/* ê¸°ê° */
 .period-wrap{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:wrap;}
 .period-lbl{font-size:12px;color:var(--ts);white-space:nowrap;}
 .presets{display:flex;gap:4px;flex-wrap:wrap;}
@@ -92,20 +92,20 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .custom-period select{padding:4px 6px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:11px;background:var(--surface);}
 .custom-period span{font-size:11px;color:var(--ts);}
 
-/* 로딩 */
+/* ë¡ë© */
 .loading-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:14px;display:none;}
 .loading-bar.on{display:block;}
 .loading-fill{height:100%;background:var(--blue);animation:loadAnim 1.5s ease-in-out infinite;}
 @keyframes loadAnim{0%{width:0%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
 
-/* 통계 */
+/* íµê³ */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
 .stat-c{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 16px;}
 .stat-lbl{font-size:11px;color:var(--th);margin-bottom:3px;}
 .stat-val{font-size:22px;font-weight:700;color:var(--tp);}
 .stat-sub{font-size:11px;color:var(--ts);}
 
-/* 결과 헤더 */
+/* ê²°ê³¼ í¤ë */
 .result-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .result-cnt strong{font-size:15px;font-weight:700;}
 .result-actions{display:flex;gap:8px;}
@@ -114,12 +114,12 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .btn-print{display:flex;align-items:center;gap:5px;padding:7px 14px;background:var(--gray);color:var(--ts);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;cursor:pointer;}
 .btn-print:hover{background:var(--border);}
 
-/* 탭 */
+/* í­ */
 .tab-bar{display:flex;gap:2px;background:var(--gray);border-radius:var(--r-md);padding:3px;margin-bottom:12px;width:fit-content;}
 .tab-btn{padding:6px 14px;border-radius:var(--r-sm);font-size:12px;font-weight:500;color:var(--ts);cursor:pointer;border:none;background:none;white-space:nowrap;}
 .tab-btn.active{background:var(--surface);color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
 
-/* 카드 */
+/* ì¹´ë */
 .card-grid{display:flex;flex-direction:column;gap:10px;}
 .bid-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:15px 18px;transition:box-shadow 0.15s;}
 .bid-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.08);}
@@ -141,7 +141,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .dday-x{background:var(--gray);color:var(--th);}
 .dday-p{background:var(--purple-l);color:var(--purple);}
 
-/* 상태 드롭다운 (건의①) */
+/* ìí ëë¡­ë¤ì´ (ê±´ìâ ) */
 .status-sel{padding:3px 8px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;outline:none;background:var(--surface);color:var(--ts);}
 .status-sel.s-plan{border-color:#3b82f6;background:#eff6ff;color:#2563eb;}
 .status-sel.s-skip{border-color:var(--border);background:var(--gray);color:var(--th);}
@@ -156,7 +156,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .tag-pre{background:var(--purple-l);color:var(--purple);}
 .tag-new{background:#dcfce7;color:var(--green);}
 
-/* 카드 액션 (건의③) */
+/* ì¹´ë ì¡ì (ê±´ìâ¢) */
 .card-actions{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap;}
 .btn-g2b{display:flex;align-items:center;gap:4px;padding:5px 11px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);border-radius:var(--r-sm);font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;}
 .btn-g2b:hover{background:#dbeafe;}
@@ -166,13 +166,13 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .note-save{padding:5px 10px;background:var(--gray);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;color:var(--ts);cursor:pointer;}
 .note-save:hover{background:var(--border);}
 
-/* 빈 상태 */
+/* ë¹ ìí */
 .empty{text-align:center;padding:60px 20px;color:var(--th);}
 .empty-icon{font-size:38px;margin-bottom:10px;}
 .empty-title{font-size:15px;font-weight:600;color:var(--ts);margin-bottom:5px;}
 .empty-desc{font-size:13px;line-height:1.7;}
 
-/* 피드백 */
+/* í¼ëë°± */
 .fb-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:14px;}
 .fb-types{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
 .fb-type{padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:12px;color:var(--ts);cursor:pointer;}
@@ -187,7 +187,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .fb-date{font-size:10px;color:var(--th);}
 .fb-summary{background:var(--blue-l);border:1px solid var(--blue-m);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:#1e40af;margin-top:8px;line-height:1.7;}
 
-/* 모달 */
+/* ëª¨ë¬ */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;display:none;}
 .modal-bg.open{display:flex;}
 .modal{background:var(--surface);border-radius:var(--r-lg);padding:26px;width:460px;max-width:92vw;}
@@ -198,11 +198,11 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .modal-inp.mono{font-family:monospace;}
 .modal-acts{display:flex;gap:8px;justify-content:flex-end;}
 
-/* 토스트 */
+/* í ì¤í¸ */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--tp);color:#fff;padding:11px 16px;border-radius:var(--r-md);font-size:13px;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 
-/* 인쇄 (건의④) */
+/* ì¸ì (ê±´ìâ£) */
 @media print {
   .hdr,.ad-top,.email-panel,.search-actions,.tab-bar,.result-actions,.card-actions,.fb-panel,.toast,.modal-bg{display:none!important;}
   .bid-card{break-inside:avoid;border:1px solid #ccc!important;margin-bottom:8px;box-shadow:none;}
@@ -215,210 +215,210 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 </head>
 <body>
 
-<!-- 헤더 -->
+<!-- í¤ë -->
 <header class="hdr">
   <div class="hdr-l">
     <div class="logo"><svg viewBox="0 0 16 16"><path d="M8 2L14 6V10L8 14L2 10V6L8 2Z"/><path d="M8 6V10M6 8H10"/></svg></div>
-    <span style="font-size:15px;font-weight:700;letter-spacing:-0.3px">나라장터 스마트 검색</span>
+    <span style="font-size:15px;font-weight:700;letter-spacing:-0.3px">ëë¼ì¥í° ì¤ë§í¸ ê²ì</span>
   </div>
   <div class="hdr-r">
-    <div class="api-pill"><div class="api-dot" style="background:var(--green)"></div><span>서비스 정상</span></div>
+    <div class="api-pill"><div class="api-dot" style="background:var(--green)"></div><span>ìë¹ì¤ ì ì</span></div>
   </div>
 </header>
 
-<!-- API 모달 -->
+<!-- API ëª¨ë¬ -->
 <div class="modal-bg" id="apiModal" style="display:none!important">
   <div class="modal">
-    <div class="modal-ttl">API 키 설정</div>
-    <div class="modal-desc">공공데이터포털(data.go.kr)에서 발급받은 <strong>일반 인증키(Encoding)</strong>를 입력하세요.<br>키는 브라우저 로컬스토리지에만 저장됩니다.</div>
-    <input class="modal-inp mono" id="apiKeyInput" type="text" placeholder="인증키 붙여넣기"/>
+    <div class="modal-ttl">API í¤ ì¤ì </div>
+    <div class="modal-desc">ê³µê³µë°ì´í°í¬í¸(data.go.kr)ìì ë°ê¸ë°ì <strong>ì¼ë° ì¸ì¦í¤(Encoding)</strong>ë¥¼ ìë ¥íì¸ì.<br>í¤ë ë¸ë¼ì°ì  ë¡ì»¬ì¤í ë¦¬ì§ìë§ ì ì¥ë©ëë¤.</div>
+    <input class="modal-inp mono" id="apiKeyInput" type="text" placeholder="ì¸ì¦í¤ ë¶ì¬ë£ê¸°"/>
     <div class="modal-acts">
-      <button class="btn-sm" onclick="closeModal('apiModal')">취소</button>
-      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="saveApiKey()">저장</button>
+      <button class="btn-sm" onclick="closeModal('apiModal')">ì·¨ì</button>
+      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="saveApiKey()">ì ì¥</button>
     </div>
   </div>
 </div>
 
-<!-- 키워드/필터 추가 모달 -->
+<!-- í¤ìë/íí° ì¶ê° ëª¨ë¬ -->
 <div class="modal-bg" id="addModal">
   <div class="modal">
-    <div class="modal-ttl" id="addModalTtl">키워드 추가</div>
-    <div class="modal-desc" id="addModalDesc">추가할 키워드를 입력하세요.</div>
-    <input class="modal-inp" id="addModalInp" type="text" placeholder="예: 하수, 수질, 대기 등"/>
+    <div class="modal-ttl" id="addModalTtl">í¤ìë ì¶ê°</div>
+    <div class="modal-desc" id="addModalDesc">ì¶ê°í  í¤ìëë¥¼ ìë ¥íì¸ì.</div>
+    <input class="modal-inp" id="addModalInp" type="text" placeholder="ì: íì, ìì§, ëê¸° ë±"/>
     <div class="modal-acts">
-      <button class="btn-sm" onclick="closeModal('addModal')">취소</button>
-      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="confirmAdd()">추가</button>
+      <button class="btn-sm" onclick="closeModal('addModal')">ì·¨ì</button>
+      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="confirmAdd()">ì¶ê°</button>
     </div>
   </div>
 </div>
 
 <div class="wrap">
 
-  <!-- 광고 상단 -->
+  <!-- ê´ê³  ìë¨ -->
   <div class="ad-top" id="adTop">
     <span class="ad-lbl">AD</span>
-    <div class="ad-txt">🏗️ <strong>엔지니어링 전문 인력 채용</strong> — 환경·플랜트 설계 경력직 모집 중 &nbsp;<a href="#" style="color:#4338ca;font-size:11px;font-weight:600" onclick="return false">자세히 보기 →</a></div>
-    <span class="ad-x" onclick="document.getElementById('adTop').style.display='none'">×</span>
+    <div class="ad-txt">ðï¸ <strong>ìì§ëì´ë§ ì ë¬¸ ì¸ë ¥ ì±ì©</strong> â íê²½Â·íëí¸ ì¤ê³ ê²½ë ¥ì§ ëª¨ì§ ì¤ &nbsp;<a href="#" style="color:#4338ca;font-size:11px;font-weight:600" onclick="return false">ìì¸í ë³´ê¸° â</a></div>
+    <span class="ad-x" onclick="document.getElementById('adTop').style.display='none'">Ã</span>
   </div>
 
-  <!-- 이메일 알림 -->
+  <!-- ì´ë©ì¼ ìë¦¼ -->
   <div class="email-panel">
-    <div class="panel-ttl">📬 평일 자동 알림</div>
+    <div class="panel-ttl">ð¬ íì¼ ìë ìë¦¼</div>
     <div class="email-row">
-      <input class="email-inp" id="emailInp" type="email" placeholder="알림받을 이메일 주소"/>
-      <button class="btn-sm" onclick="saveEmail()">저장</button>
-      <span id="emailOk" style="font-size:12px;color:var(--green);display:none">✓ 저장됨</span>
+      <input class="email-inp" id="emailInp" type="email" placeholder="ìë¦¼ë°ì ì´ë©ì¼ ì£¼ì"/>
+      <button class="btn-sm" onclick="saveEmail()">ì ì¥</button>
+      <span id="emailOk" style="font-size:12px;color:var(--green);display:none">â ì ì¥ë¨</span>
     </div>
-    <div class="email-desc">주말·공휴일 제외 평일 오전, 신규 공고 발생 시 자동 이메일 발송</div>
+    <div class="email-desc">ì£¼ë§Â·ê³µí´ì¼ ì ì¸ íì¼ ì¤ì , ì ê· ê³µê³  ë°ì ì ìë ì´ë©ì¼ ë°ì¡</div>
   </div>
 
-  <!-- 검색 유형 -->
+  <!-- ê²ì ì í -->
   <div class="stype-bar">
-    <button class="stype-btn active" id="stype-bid" onclick="setType('bid')">📋 입찰공고</button>
-    <button class="stype-btn" id="stype-pre" onclick="setType('pre')">📌 사전규격공개</button>
+    <button class="stype-btn active" id="stype-bid" onclick="setType('bid')">ð ìì°°ê³µê³ </button>
+    <button class="stype-btn" id="stype-pre" onclick="setType('pre')">ð ì¬ì ê·ê²©ê³µê°</button>
   </div>
 
-  <!-- 검색 패널 -->
+  <!-- ê²ì í¨ë -->
   <div class="sp">
-    <div class="sp-ttl" id="spTtl">🔍 입찰공고 검색</div>
+    <div class="sp-ttl" id="spTtl">ð ìì°°ê³µê³  ê²ì</div>
 
-    <!-- 키워드 -->
+    <!-- í¤ìë -->
     <div class="row-hdr">
-      <span class="row-lbl">검색 키워드</span>
+      <span class="row-lbl">ê²ì í¤ìë</span>
       <div style="display:flex;gap:6px">
-        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="selectAllKw()">전체선택</button>
-        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="clearKw()">선택해제</button>
+        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="selectAllKw()">ì ì²´ì í</button>
+        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="clearKw()">ì íí´ì </button>
       </div>
     </div>
     <div class="kw-grid" id="kwGrid"></div>
 
     <div class="divider"></div>
 
-    <!-- 업무유형 -->
+    <!-- ìë¬´ì í -->
     <div class="row-hdr" style="margin-bottom:8px">
-      <span class="row-lbl">업무 유형 필터</span>
+      <span class="row-lbl">ìë¬´ ì í íí°</span>
     </div>
     <div class="filter-row" id="filterRow"></div>
 
-    <!-- 검색 액션 + 기간 -->
+    <!-- ê²ì ì¡ì + ê¸°ê° -->
     <div class="search-actions">
       <button class="btn-primary" id="searchBtn" onclick="startSearch()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        전체 검색
+        ì ì²´ ê²ì
       </button>
-      <button class="btn-sm" onclick="clearAll()">초기화</button>
+      <button class="btn-sm" onclick="clearAll()">ì´ê¸°í</button>
 
       <div class="period-wrap">
-        <span class="period-lbl">검색기간</span>
+        <span class="period-lbl">ê²ìê¸°ê°</span>
         <div class="presets" id="presetBtns">
-          <button class="preset" onclick="setPeriod('1d',this)">1일</button>
-          <button class="preset" onclick="setPeriod('1w',this)">1주</button>
-          <button class="preset active" onclick="setPeriod('1m',this)">1개월</button>
-          <button class="preset" onclick="setPeriod('3m',this)">3개월</button>
-          <button class="preset" onclick="setPeriod('custom',this)">직접입력</button>
+          <button class="preset" onclick="setPeriod('1d',this)">1ì¼</button>
+          <button class="preset" onclick="setPeriod('1w',this)">1ì£¼</button>
+          <button class="preset active" onclick="setPeriod('1m',this)">1ê°ì</button>
+          <button class="preset" onclick="setPeriod('3m',this)">3ê°ì</button>
+          <button class="preset" onclick="setPeriod('custom',this)">ì§ì ìë ¥</button>
         </div>
         <div class="custom-period" id="customPeriod" style="display:none">
-          <select id="cY1"></select><span>년</span>
-          <select id="cM1"></select><span>월</span>
-          <select id="cD1"></select><span>일</span>
+          <select id="cY1"></select><span>ë</span>
+          <select id="cM1"></select><span>ì</span>
+          <select id="cD1"></select><span>ì¼</span>
           <span style="color:var(--th)">~</span>
-          <select id="cY2"></select><span>년</span>
-          <select id="cM2"></select><span>월</span>
-          <select id="cD2"></select><span>일</span>
+          <select id="cY2"></select><span>ë</span>
+          <select id="cM2"></select><span>ì</span>
+          <select id="cD2"></select><span>ì¼</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 로딩 -->
+  <!-- ë¡ë© -->
   <div class="loading-bar" id="loadBar"><div class="loading-fill"></div></div>
 
-  <!-- 통계 -->
+  <!-- íµê³ -->
   <div class="stats" id="statsRow" style="display:none">
-    <div class="stat-c"><div class="stat-lbl">전체 공고</div><div class="stat-val" id="sTot">0</div><div class="stat-sub">건</div></div>
-    <div class="stat-c"><div class="stat-lbl">마감임박 D-7</div><div class="stat-val" id="sUrg" style="color:var(--red)">0</div><div class="stat-sub">건</div></div>
-    <div class="stat-c"><div class="stat-lbl">이번주 신규</div><div class="stat-val" id="sNew" style="color:var(--blue)">0</div><div class="stat-sub">건</div></div>
+    <div class="stat-c"><div class="stat-lbl">ì ì²´ ê³µê³ </div><div class="stat-val" id="sTot">0</div><div class="stat-sub">ê±´</div></div>
+    <div class="stat-c"><div class="stat-lbl">ë§ê°ìë° D-7</div><div class="stat-val" id="sUrg" style="color:var(--red)">0</div><div class="stat-sub">ê±´</div></div>
+    <div class="stat-c"><div class="stat-lbl">ì´ë²ì£¼ ì ê·</div><div class="stat-val" id="sNew" style="color:var(--blue)">0</div><div class="stat-sub">ê±´</div></div>
   </div>
 
-  <!-- 결과 -->
+  <!-- ê²°ê³¼ -->
   <div id="resultArea" style="display:none">
     <div class="result-hdr">
-      <div class="result-cnt">검색결과 <strong id="rCount">0</strong>건</div>
+      <div class="result-cnt">ê²ìê²°ê³¼ <strong id="rCount">0</strong>ê±´</div>
       <div class="result-actions">
-        <!-- 건의④: 인쇄/PDF -->
+        <!-- ê±´ìâ£: ì¸ì/PDF -->
         <button class="btn-print" onclick="window.print()">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-          인쇄/PDF
+          ì¸ì/PDF
         </button>
         <button class="btn-excel" onclick="downloadExcel()">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          엑셀 다운로드
+          ìì ë¤ì´ë¡ë
         </button>
       </div>
     </div>
     <div class="tab-bar">
-      <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">전체</button>
-      <button class="tab-btn" id="tab-urgent" onclick="switchTab('urgent')">마감임박 D-7</button>
-      <button class="tab-btn" id="tab-active" onclick="switchTab('active')">진행중</button>
-      <button class="tab-btn" id="tab-expired" onclick="switchTab('expired')">마감</button>
+      <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">ì ì²´</button>
+      <button class="tab-btn" id="tab-urgent" onclick="switchTab('urgent')">ë§ê°ìë° D-7</button>
+      <button class="tab-btn" id="tab-active" onclick="switchTab('active')">ì§íì¤</button>
+      <button class="tab-btn" id="tab-expired" onclick="switchTab('expired')">ë§ê°</button>
     </div>
     <div class="card-grid" id="cardGrid"></div>
   </div>
 
-  <!-- 빈 상태 -->
+  <!-- ë¹ ìí -->
   <div class="empty" id="emptyState">
-    <div class="empty-icon">🔎</div>
-    <div class="empty-title">키워드를 선택하고 검색하세요</div>
-    <div class="empty-desc" id="emptyDesc">음식물, 소각, 매립 등 키워드를 선택한 뒤<br>전체 검색을 누르면 한 번에 결과를 가져옵니다</div>
+    <div class="empty-icon">ð</div>
+    <div class="empty-title">í¤ìëë¥¼ ì ííê³  ê²ìíì¸ì</div>
+    <div class="empty-desc" id="emptyDesc">ììë¬¼, ìê°, ë§¤ë¦½ ë± í¤ìëë¥¼ ì íí ë¤<br>ì ì²´ ê²ìì ëë¥´ë©´ í ë²ì ê²°ê³¼ë¥¼ ê°ì ¸ìµëë¤</div>
   </div>
 
   <div style="height:1px;background:var(--border);margin:26px 0 18px"></div>
 
-  <!-- 피드백 -->
+  <!-- í¼ëë°± -->
   <div class="fb-panel">
-    <div class="panel-ttl">💬 사용자 의견 수집</div>
+    <div class="panel-ttl">ð¬ ì¬ì©ì ìê²¬ ìì§</div>
     <div class="fb-types" id="fbTypes">
-      <button class="fb-type active" data-t="불편사항">😤 불편사항</button>
-      <button class="fb-type" data-t="개선요청">💡 개선요청</button>
-      <button class="fb-type" data-t="오류신고">🐛 오류신고</button>
-      <button class="fb-type" data-t="기타의견">✏️ 기타의견</button>
+      <button class="fb-type active" data-t="ë¶í¸ì¬í­">ð¤ ë¶í¸ì¬í­</button>
+      <button class="fb-type" data-t="ê°ì ìì²­">ð¡ ê°ì ìì²­</button>
+      <button class="fb-type" data-t="ì¤ë¥ì ê³ ">ð ì¤ë¥ì ê³ </button>
+      <button class="fb-type" data-t="ê¸°íìê²¬">âï¸ ê¸°íìê²¬</button>
     </div>
-    <textarea class="fb-ta" id="fbTa" placeholder="불편하셨던 점이나 개선 요청사항을 자유롭게 작성해주세요..."></textarea>
+    <textarea class="fb-ta" id="fbTa" placeholder="ë¶í¸íì¨ë ì ì´ë ê°ì  ìì²­ì¬í­ì ìì ë¡­ê² ìì±í´ì£¼ì¸ì..."></textarea>
     <div class="fb-actions">
-      <button class="btn-sm" onclick="summarizeFb()">📊 의견 요약</button>
-      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="submitFb()">제출</button>
+      <button class="btn-sm" onclick="summarizeFb()">ð ìê²¬ ìì½</button>
+      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="submitFb()">ì ì¶</button>
     </div>
     <div id="fbSummary" style="display:none"></div>
     <div class="fb-list" id="fbList" style="display:none"></div>
   </div>
 
-  <!-- 하단 광고 -->
+  <!-- íë¨ ê´ê³  -->
   <div class="ad-top" style="margin-bottom:8px">
     <span class="ad-lbl">AD</span>
-    <div class="ad-txt" style="font-size:11px;color:#64748b">입찰 관련 법률·계약 자문 | 공공조달 컨설팅 전문 &nbsp;<a href="#" style="color:#4338ca;font-size:11px" onclick="return false">문의하기 →</a></div>
+    <div class="ad-txt" style="font-size:11px;color:#64748b">ìì°° ê´ë ¨ ë²ë¥ Â·ê³ì½ ìë¬¸ | ê³µê³µì¡°ë¬ ì»¨ì¤í ì ë¬¸ &nbsp;<a href="#" style="color:#4338ca;font-size:11px" onclick="return false">ë¬¸ìíê¸° â</a></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== 상태 =====
-let KW1 = ['음식물','소각','자원','순환','재활용','매립','폐기물','침출수','슬러지','바이오','열분해','분뇨','환경'];
-let KW2 = ['실시설계','기본설계','타당성','기본계획','기본 및 실시'];
+// ===== ìí =====
+let KW1 = ['ììë¬¼','ìê°','ìì','ìí','ì¬íì©','ë§¤ë¦½','íê¸°ë¬¼','ì¹¨ì¶ì','ì¬ë¬ì§','ë°ì´ì¤','ì´ë¶í´','ë¶ë¨','íê²½'];
+let KW2 = ['ì¤ìì¤ê³','ê¸°ë³¸ì¤ê³','íë¹ì±','ê¸°ë³¸ê³í','ê¸°ë³¸ ë° ì¤ì'];
 let selKw = new Set(KW1);
 let selFil = new Set(KW2);
 let allResults = [];
-let kwCounts = {}; // 건의①: 키워드별 결과수
+let kwCounts = {}; // ê±´ìâ : í¤ìëë³ ê²°ê³¼ì
 let currentTab = 'all';
 let searchType = 'bid';
 let notes = {};
-let statuses = {}; // 건의①: 공고 상태
+let statuses = {}; // ê±´ìâ : ê³µê³  ìí
 let feedbacks = [];
 let curPeriod = '1m';
-let activeFbType = '불편사항';
+let activeFbType = 'ë¶í¸ì¬í­';
 let addTarget = 'kw';
 
-// ===== 초기화 =====
+// ===== ì´ê¸°í =====
 function init() {
   renderKw(); renderFilters(); initDates(); loadStorage();
   document.querySelectorAll('.fb-type').forEach(b => {
@@ -440,21 +440,21 @@ function loadStorage() {
   renderKw(); renderFilters();
 }
 
-// ===== 검색 유형 =====
+// ===== ê²ì ì í =====
 function setType(t) {
   searchType=t;
   ['bid','pre'].forEach(x=>document.getElementById('stype-'+x).classList.toggle('active',x===t));
-  document.getElementById('spTtl').textContent = t==='bid'?'🔍 입찰공고 검색':'🔍 사전규격공개 검색';
+  document.getElementById('spTtl').textContent = t==='bid'?'ð ìì°°ê³µê³  ê²ì':'ð ì¬ì ê·ê²©ê³µê° ê²ì';
   document.getElementById('emptyDesc').innerHTML = t==='bid'
-    ?'음식물, 소각, 매립 등 키워드를 선택한 뒤<br>전체 검색을 누르면 한 번에 결과를 가져옵니다'
-    :'사전규격공개는 실공고 이전 단계입니다.<br>키워드 선택 후 검색하면 사전규격 목록을 가져옵니다';
+    ?'ììë¬¼, ìê°, ë§¤ë¦½ ë± í¤ìëë¥¼ ì íí ë¤<br>ì ì²´ ê²ìì ëë¥´ë©´ í ë²ì ê²°ê³¼ë¥¼ ê°ì ¸ìµëë¤'
+    :'ì¬ì ê·ê²©ê³µê°ë ì¤ê³µê³  ì´ì  ë¨ê³ìëë¤.<br>í¤ìë ì í í ê²ìíë©´ ì¬ì ê·ê²© ëª©ë¡ì ê°ì ¸ìµëë¤';
   allResults=[]; kwCounts={};
   document.getElementById('resultArea').style.display='none';
   document.getElementById('statsRow').style.display='none';
   document.getElementById('emptyState').style.display='block';
 }
 
-// ===== 키워드 렌더 (건의②: 키워드별 결과수 표시) =====
+// ===== í¤ìë ë ë (ê±´ìâ¡: í¤ìëë³ ê²°ê³¼ì íì) =====
 function renderKw() {
   document.getElementById('kwGrid').innerHTML =
     KW1.map(kw => `
@@ -463,20 +463,20 @@ function renderKw() {
           ${kw}
           <span class="kw-count">${kwCounts[kw]||0}</span>
         </div>
-        <span class="kw-del" onclick="removeKw('${kw}')" title="삭제">✕</span>
+        <span class="kw-del" onclick="removeKw('${kw}')" title="ì­ì ">â</span>
       </div>
-    `).join('') + `<button class="btn-add" onclick="openAdd('kw')">+ 키워드 추가</button>`;
+    `).join('') + `<button class="btn-add" onclick="openAdd('kw')">+ í¤ìë ì¶ê°</button>`;
 }
 
 function renderFilters() {
   document.getElementById('filterRow').innerHTML =
-    `<span class="flbl">업무유형</span>` +
+    `<span class="flbl">ìë¬´ì í</span>` +
     KW2.map(f => `
       <div style="display:flex;align-items:center">
         <div class="fchip ${selFil.has(f)?'active':''}" onclick="toggleFil('${f}')">${f}</div>
-        <span class="kw-del" style="margin-left:2px" onclick="removeFil('${f}')" title="삭제">✕</span>
+        <span class="kw-del" style="margin-left:2px" onclick="removeFil('${f}')" title="ì­ì ">â</span>
       </div>
-    `).join('') + `<button class="btn-add" onclick="openAdd('fil')">+ 유형 추가</button>`;
+    `).join('') + `<button class="btn-add" onclick="openAdd('fil')">+ ì í ì¶ê°</button>`;
 }
 
 function toggleKw(kw){ selKw.has(kw)?selKw.delete(kw):selKw.add(kw); renderKw(); }
@@ -489,32 +489,32 @@ function clearAll(){ selKw.clear(); selFil.clear(); renderKw(); renderFilters();
 
 function openAdd(target){
   addTarget=target;
-  document.getElementById('addModalTtl').textContent = target==='kw'?'검색 키워드 추가':'업무 유형 추가';
-  document.getElementById('addModalDesc').textContent = target==='kw'?'추가할 검색 키워드를 입력하세요.':'추가할 업무 유형을 입력하세요.';
+  document.getElementById('addModalTtl').textContent = target==='kw'?'ê²ì í¤ìë ì¶ê°':'ìë¬´ ì í ì¶ê°';
+  document.getElementById('addModalDesc').textContent = target==='kw'?'ì¶ê°í  ê²ì í¤ìëë¥¼ ìë ¥íì¸ì.':'ì¶ê°í  ìë¬´ ì íì ìë ¥íì¸ì.';
   document.getElementById('addModalInp').value='';
   openModal('addModal');
   setTimeout(()=>document.getElementById('addModalInp').focus(),100);
 }
 function confirmAdd(){
   const v=document.getElementById('addModalInp').value.trim();
-  if(!v){ showToast('내용을 입력하세요'); return; }
+  if(!v){ showToast('ë´ì©ì ìë ¥íì¸ì'); return; }
   if(addTarget==='kw'){
     if(!KW1.includes(v)){ KW1.push(v); selKw.add(v); localStorage.setItem('g2b_kw1',JSON.stringify(KW1)); renderKw(); }
-    else showToast('이미 있는 키워드입니다');
+    else showToast('ì´ë¯¸ ìë í¤ìëìëë¤');
   } else {
     if(!KW2.includes(v)){ KW2.push(v); selFil.add(v); localStorage.setItem('g2b_kw2',JSON.stringify(KW2)); renderFilters(); }
-    else showToast('이미 있는 항목입니다');
+    else showToast('ì´ë¯¸ ìë í­ëª©ìëë¤');
   }
   closeModal('addModal');
 }
 
-// ===== 기간 =====
+// ===== ê¸°ê° =====
 function setPeriod(p,btn){ curPeriod=p; document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.getElementById('customPeriod').style.display=p==='custom'?'flex':'none'; }
 function initDates(){
   const now=new Date(); const y=now.getFullYear(); const m=now.getMonth()+1; const d=now.getDate();
   ['cY1','cY2'].forEach(id=>{ const s=document.getElementById(id); for(let i=y;i>=y-5;i--){const o=document.createElement('option');o.value=i;o.text=i;s.appendChild(o);} s.value=id==='cY1'?y-1:y; });
-  ['cM1','cM2'].forEach(id=>{ const s=document.getElementById(id); for(let i=1;i<=12;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.text=i+'월';s.appendChild(o);} s.value=String(m).padStart(2,'0'); });
-  ['cD1','cD2'].forEach(id=>{ const s=document.getElementById(id); for(let i=1;i<=31;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.text=i+'일';s.appendChild(o);} s.value=String(d).padStart(2,'0'); });
+  ['cM1','cM2'].forEach(id=>{ const s=document.getElementById(id); for(let i=1;i<=12;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.text=i+'ì';s.appendChild(o);} s.value=String(m).padStart(2,'0'); });
+  ['cD1','cD2'].forEach(id=>{ const s=document.getElementById(id); for(let i=1;i<=31;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.text=i+'ì¼';s.appendChild(o);} s.value=String(d).padStart(2,'0'); });
 }
 function getRange(){
   const now=new Date(); const fmt=d=>`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
@@ -531,12 +531,12 @@ function getRange(){
   return { sd:fmt(s), ed:fmt(now) };
 }
 
-// ===== 검색 =====
+// ===== ê²ì =====
 async function startSearch(){
-  if(selKw.size===0){ showToast('키워드를 1개 이상 선택하세요'); return; }
+  if(selKw.size===0){ showToast('í¤ìëë¥¼ 1ê° ì´ì ì ííì¸ì'); return; }
 
   const btn=document.getElementById('searchBtn');
-  btn.disabled=true; btn.innerHTML='<span style="animation:spin 0.8s linear infinite;display:inline-block">⟳</span> 검색 중...';
+  btn.disabled=true; btn.innerHTML='<span style="animation:spin 0.8s linear infinite;display:inline-block">â³</span> ê²ì ì¤...';
   document.getElementById('loadBar').classList.add('on');
   document.getElementById('emptyState').style.display='none';
   document.getElementById('resultArea').style.display='none';
@@ -547,9 +547,9 @@ async function startSearch(){
 
   try {
     const keywords=Array.from(selKw);
-    // Vercel 서버리스 API 호출 (CORS 해결)
+    // Vercel ìë²ë¦¬ì¤ API í¸ì¶ (CORS í´ê²°)
     const endpoint = '/api/search';
-    // 사전규격공개는 별도 API 호출
+    // ì¬ì ê·ê²©ê³µê°ë ë³ë API í¸ì¶
     if (searchType === 'pre') {
       await startPreSearch(sd, ed);
       return;
@@ -566,8 +566,8 @@ async function startSearch(){
       dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
       chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
     }
-    // 필터가 있으면 필터를 메인 키워드로, 원래 키워드를 서브필터로 검색
-    // 필터 없으면 키워드만 검색
+    // íí°ê° ìì¼ë©´ íí°ë¥¼ ë©ì¸ í¤ìëë¡, ìë í¤ìëë¥¼ ìë¸íí°ë¡ ê²ì
+    // íí° ìì¼ë©´ í¤ìëë§ ê²ì
     const searchCombos = filters.length > 0
       ? filters.flatMap(f => keywords.map(kw => ({ main: f, sub: kw })))
       : keywords.map(kw => ({ main: kw, sub: null }));
@@ -583,63 +583,118 @@ async function startSearch(){
     );
     let raw = (await Promise.all(promises)).flat();
 
-    // 2차 필터: 필터가 있으면 키워드로 필터링, 필터 없으면 키워드 그대로
+    // 2ì°¨ íí°: íí°ê° ìì¼ë©´ í¤ìëë¡ íí°ë§, íí° ìì¼ë©´ í¤ìë ê·¸ëë¡
     if (selFil.size > 0) {
-      // 필터를 메인으로 검색했으므로 → 키워드로 필터링
+      // íí°ë¥¼ ë©ì¸ì¼ë¡ ê²ìíì¼ë¯ë¡ â í¤ìëë¡ íí°ë§
       raw = raw.filter(item => {
         const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g,'');
         return Array.from(selKw).some(kw => nm.includes(kw.toLowerCase().replace(/\s/g,'')));
       });
     }
 
-    // 중복 제거
+    // ì¤ë³µ ì ê±°
     const seen=new Set();
     raw=raw.filter(item=>{ const id=item.bidNtceNo||item.ntceNo||item.prdctClsfcNo||JSON.stringify(item).slice(0,60); if(seen.has(id)) return false; seen.add(id); return true; });
 
-    // 정렬 (최신순)
+    // ì ë ¬ (ìµì ì)
     raw.sort((a,b)=>new Date(b.bidClseDt||b.opengDt||b.ntceDt||0)-new Date(a.bidClseDt||a.opengDt||a.ntceDt||0));
 
     allResults=raw;
-    renderKw(); // 건의②: 검색 후 키워드 카운트 업데이트
+    renderKw(); // ê±´ìâ¡: ê²ì í í¤ìë ì¹´ì´í¸ ìë°ì´í¸
     renderResults();
   } catch(e){
-    console.error(e); showToast('오류: '+e.message);
+    console.error(e); showToast('ì¤ë¥: '+e.message);
     document.getElementById('emptyState').style.display='block';
   } finally {
     btn.disabled=false;
-    btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
+    btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> ì ì²´ ê²ì';
     document.getElementById('loadBar').classList.remove('on');
   }
 }
 
 async function startPreSearch(sd, ed) {
+
+  // 사전규격공개는 나라장터 내부 세션 API라 직접 호출 불가
+
+  // 선택된 키워드를 클립보드에 복사하고 나라장터로 이동
+
   const keywords = Array.from(selKw);
-  const promises = keywords.map(kw =>
-    fetch(`/api/prespec?keyword=${encodeURIComponent(kw)}&startDt=${sd}&endDt=${ed}`)
-      .then(r => r.json())
-      .then(data => { const items=(data.items||[]).map(i=>({...i,_kw:kw})); kwCounts[kw]=items.length; return items; })
-      .catch(() => { kwCounts[kw]=0; return []; })
-  );
-  let raw = (await Promise.all(promises)).flat();
-  // 중복 제거
-  const seen = new Set();
-  raw = raw.filter(item => {
-    const id = item.prcrmntReqNo || JSON.stringify(item).slice(0,50);
-    if (seen.has(id)) return false; seen.add(id); return true;
-  });
-  // 업무유형 필터
-  if (selFil.size > 0) {
-    raw = raw.filter(item => {
-      const nm = (item.prdctClsfcNoNm || item.bsnsSumryCn || '').toLowerCase().replace(/\s/g,'');
-      return Array.from(selKw).some(kw => nm.includes(kw.toLowerCase().replace(/\s/g,'')));
-    });
+
+  const kwText = keywords.join(', ');
+
+  
+
+  try {
+
+    await navigator.clipboard.writeText(kwText);
+
+    showToast('키워드 복사 완료! 나라장터에서 붙여넣기 하세요');
+
+  } catch(e) {
+
+    showToast('키워드: ' + kwText);
+
   }
-  allResults = raw;
-  renderKw();
-  renderResults();
+
+  
+
+  // 나라장터 발주목록(사전규격공개) 페이지 열기
+
+  window.open('https://www.g2b.go.kr/', '_blank');
+
+  
+
+  // 안내 메시지 표시
+
+  allResults = [];
+
+  document.getElementById('emptyState').style.display = 'block';
+
+  document.getElementById('emptyState').innerHTML = `
+
+    <div class="empty-icon">📌</div>
+
+    <div class="empty-title">사전규격공개 안내</div>
+
+    <div class="empty-desc">
+
+      나라장터가 새 탭으로 열렸어요.<br><br>
+
+      <strong>① 발주 → 발주목록 → 사전규격공개 탭 클릭</strong><br>
+
+      <strong>② 사업명에 아래 키워드 붙여넣기 (Ctrl+V)</strong><br><br>
+
+      <span style="background:var(--blue-l);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600">${esc(kwText)}</span><br><br>
+
+      <button onclick="navigator.clipboard.writeText('${esc(kwText)}').then(()=>showToast('복사됨!'))" 
+
+        style="margin-top:8px;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-md);font-size:13px;cursor:pointer">
+
+        📋 키워드 다시 복사
+
+      </button>
+
+    </div>
+
+  `;
+
+  document.getElementById('statsRow').style.display = 'none';
+
+  document.getElementById('resultArea').style.display = 'none';
+
+  
+
+  btn.disabled = false;
+
+  btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
+
+  document.getElementById('loadBar').classList.remove('on');
+
+  return;
+
 }
 
-// ===== 결과 렌더 =====
+// ===== ê²°ê³¼ ë ë =====
 function renderResults(){
   document.getElementById('rCount').textContent=allResults.length;
   document.getElementById('resultArea').style.display='block';
@@ -651,7 +706,7 @@ function renderResults(){
   document.getElementById('sNew').textContent=nw;
   document.getElementById('statsRow').style.display='grid';
   renderCards(getFiltered());
-  showToast(`${allResults.length}건 검색 완료`);
+  showToast(`${allResults.length}ê±´ ê²ì ìë£`);
 }
 
 function getFiltered(){
@@ -672,28 +727,28 @@ function getDday(item){
 
 function renderCards(items){
   const g=document.getElementById('cardGrid');
-  if(!items.length){ g.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">해당 조건의 공고가 없습니다</div></div>'; return; }
+  if(!items.length){ g.innerHTML='<div class="empty"><div class="empty-icon">ð­</div><div class="empty-title">í´ë¹ ì¡°ê±´ì ê³µê³ ê° ììµëë¤</div></div>'; return; }
   g.innerHTML=items.map((item,idx)=>{
     const dday=getDday(item); const isPre=item._isPreSpec;
     let dc='dday-g',cc='normal',dt='';
-    if(isPre){dc='dday-p';cc='pre-spec';dt='사전규격';}
-    else if(dday===null){dc='dday-x';cc='expired';dt='마감일미정';}
+    if(isPre){dc='dday-p';cc='pre-spec';dt='ì¬ì ê·ê²©';}
+    else if(dday===null){dc='dday-x';cc='expired';dt='ë§ê°ì¼ë¯¸ì ';}
     else if(dday<0){dc='dday-x';cc='expired';dt=`D+${Math.abs(dday)}`;}
     else if(dday<=7){dc='dday-r';cc='urgent';dt=`D-${dday}`;}
     else if(dday<=14){dc='dday-a';cc='soon';dt=`D-${dday}`;}
     else{dt=`D-${dday}`;}
 
-    const title=item.bidNtceNm||item.prdctClsfcNoNm||item.ntceNm||'(제목없음)';
+    const title=item.bidNtceNm||item.prdctClsfcNoNm||item.ntceNm||'(ì ëª©ìì)';
     const org=item.dminsttNm||item.ntceInsttNm||'-';
     const budget=item.asignBdgtAmt||item.presmptPrce||null;
-    const bStr=budget?(parseFloat(budget)/1e8).toFixed(1)+'억원':'미정';
+    const bStr=budget?(parseFloat(budget)/1e8).toFixed(1)+'ìµì':'ë¯¸ì ';
     const closeD=(item.bidClseDt||'').slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/,'$1.$2.$3')||'-';
     const ntceD=(item.ntceDt||item.bidNtceDt||'').slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/,'$1.$2.$3');
     const ntceNo=item.bidNtceNo||item.ntceNo||'';
     const g2bUrl=ntceNo?`https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=/pt/menu/frameTgong.do?url=https://www.g2b.go.kr:8101/ep/tbid/tbBidList.do?bidno=${encodeURIComponent(ntceNo)}`:'https://www.g2b.go.kr/';
     const sn=notes[ntceNo||title]||'';
     const status=statuses[ntceNo||title]||'';
-    const statusClass={'참여예정':'s-plan','미참여':'s-skip','낙찰':'s-win','유찰':'s-fail','취소':'s-cancel'}[status]||'';
+    const statusClass={'ì°¸ì¬ìì ':'s-plan','ë¯¸ì°¸ì¬':'s-skip','ëì°°':'s-win','ì ì°°':'s-fail','ì·¨ì':'s-cancel'}[status]||'';
     const isNew=dday!==null&&ntceD&&(new Date()-new Date(ntceD.replace(/\./g,'-')))<7*864e5;
 
     return `<div class="bid-card ${cc}" id="card-${idx}">
@@ -702,41 +757,41 @@ function renderCards(items){
           <a class="card-title-link" href="${g2bUrl}" target="_blank" rel="noopener">${esc(title)}</a>
         </div>
         <div class="card-badges">
-          <!-- 건의①: 상태 드롭다운 -->
+          <!-- ê±´ìâ : ìí ëë¡­ë¤ì´ -->
           <select class="status-sel ${statusClass}" id="sts-${idx}" onchange="saveStatus('${esc(ntceNo||title)}',${idx})">
-            <option value="">상태미정</option>
-            <option value="참여예정" ${status==='참여예정'?'selected':''}>참여예정</option>
-            <option value="미참여" ${status==='미참여'?'selected':''}>미참여</option>
-            <option value="낙찰" ${status==='낙찰'?'selected':''}>낙찰</option>
-            <option value="유찰" ${status==='유찰'?'selected':''}>유찰</option>
-            <option value="취소" ${status==='취소'?'selected':''}>취소</option>
+            <option value="">ìíë¯¸ì </option>
+            <option value="ì°¸ì¬ìì " ${status==='ì°¸ì¬ìì '?'selected':''}>ì°¸ì¬ìì </option>
+            <option value="ë¯¸ì°¸ì¬" ${status==='ë¯¸ì°¸ì¬'?'selected':''}>ë¯¸ì°¸ì¬</option>
+            <option value="ëì°°" ${status==='ëì°°'?'selected':''}>ëì°°</option>
+            <option value="ì ì°°" ${status==='ì ì°°'?'selected':''}>ì ì°°</option>
+            <option value="ì·¨ì" ${status==='ì·¨ì'?'selected':''}>ì·¨ì</option>
           </select>
           <span class="dday ${dc}">${dt}</span>
         </div>
       </div>
       <div class="card-meta">
-        <span>🏛 ${esc(org)}</span>
-        <span>💰 ${bStr}</span>
-        ${isPre?`<span>📌 사전규격</span>`:`<span>📅 마감 ${closeD}</span>`}
-        <span>📋 게시 ${ntceD}</span>
+        <span>ð ${esc(org)}</span>
+        <span>ð° ${bStr}</span>
+        ${isPre?`<span>ð ì¬ì ê·ê²©</span>`:`<span>ð ë§ê° ${closeD}</span>`}
+        <span>ð ê²ì ${ntceD}</span>
         ${ntceNo?`<span style="color:var(--th);font-size:11px">${ntceNo}</span>`:''}
       </div>
       <div class="card-tags">
         ${item._kw?`<span class="tag tag-kw">${item._kw}</span>`:''}
-        ${isPre?`<span class="tag tag-pre">사전규격</span>`:''}
+        ${isPre?`<span class="tag tag-pre">ì¬ì ê·ê²©</span>`:''}
         ${isNew?`<span class="tag tag-new">NEW</span>`:''}
         ${getTags(title).map(t=>`<span class="tag">${t}</span>`).join('')}
       </div>
-      <!-- 건의③: 나라장터 바로가기 버튼 + 비고 -->
+      <!-- ê±´ìâ¢: ëë¼ì¥í° ë°ë¡ê°ê¸° ë²í¼ + ë¹ê³  -->
       <div class="card-actions">
         <a class="btn-g2b" href="https://www.g2b.go.kr/" target="_blank" rel="noopener">
           <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          나라장터 바로가기
+          ëë¼ì¥í° ë°ë¡ê°ê¸°
         </a>
-        ${ntceNo ? '<button class="note-save" onclick="navigator.clipboard.writeText(&#39;'+esc(ntceNo)+'&#39;).then(()=>showToast(&#39;공고번호 복사됨: '+esc(ntceNo)+'&#39;))" title="공고번호 복사">📋 '+esc(ntceNo)+'</button>' : ''}
-        <span class="note-lbl">비고</span>
-        <input class="note-inp" id="note-${idx}" value="${esc(sn)}" placeholder="낙찰사, 경쟁사, 메모 등..."/>
-        <button class="note-save" onclick="saveNote('${esc(ntceNo||title)}',${idx})">저장</button>
+        ${ntceNo ? '<button class="note-save" onclick="navigator.clipboard.writeText(&#39;'+esc(ntceNo)+'&#39;).then(()=>showToast(&#39;ê³µê³ ë²í¸ ë³µì¬ë¨: '+esc(ntceNo)+'&#39;))" title="ê³µê³ ë²í¸ ë³µì¬">ð '+esc(ntceNo)+'</button>' : ''}
+        <span class="note-lbl">ë¹ê³ </span>
+        <input class="note-inp" id="note-${idx}" value="${esc(sn)}" placeholder="ëì°°ì¬, ê²½ìì¬, ë©ëª¨ ë±..."/>
+        <button class="note-save" onclick="saveNote('${esc(ntceNo||title)}',${idx})">ì ì¥</button>
       </div>
     </div>`;
   }).join('');
@@ -744,32 +799,32 @@ function renderCards(items){
 
 function getTags(t){
   const tags=[];
-  if(t.includes('실시설계')) tags.push('실시설계');
-  else if(t.includes('기본설계')) tags.push('기본설계');
-  else if(t.includes('기본 및 실시')||t.includes('기본및실시')) tags.push('기본+실시');
-  if(t.includes('타당성')) tags.push('타당성');
-  if(t.includes('기본계획')) tags.push('기본계획');
-  if(t.includes('PQ')||t.includes('사업수행능력')) tags.push('PQ');
-  if(t.includes('재공고')) tags.push('재공고');
-  if(t.includes('긴급')) tags.push('긴급');
-  if(t.includes('정정')) tags.push('정정');
+  if(t.includes('ì¤ìì¤ê³')) tags.push('ì¤ìì¤ê³');
+  else if(t.includes('ê¸°ë³¸ì¤ê³')) tags.push('ê¸°ë³¸ì¤ê³');
+  else if(t.includes('ê¸°ë³¸ ë° ì¤ì')||t.includes('ê¸°ë³¸ë°ì¤ì')) tags.push('ê¸°ë³¸+ì¤ì');
+  if(t.includes('íë¹ì±')) tags.push('íë¹ì±');
+  if(t.includes('ê¸°ë³¸ê³í')) tags.push('ê¸°ë³¸ê³í');
+  if(t.includes('PQ')||t.includes('ì¬ììíë¥ë ¥')) tags.push('PQ');
+  if(t.includes('ì¬ê³µê³ ')) tags.push('ì¬ê³µê³ ');
+  if(t.includes('ê¸´ê¸')) tags.push('ê¸´ê¸');
+  if(t.includes('ì ì ')) tags.push('ì ì ');
   return tags.slice(0,4);
 }
 
-// 건의①: 상태 저장
+// ê±´ìâ : ìí ì ì¥
 function saveStatus(key,idx){
   const v=document.getElementById(`sts-${idx}`).value;
   statuses[key]=v; localStorage.setItem('g2b_statuses',JSON.stringify(statuses));
   const s=document.getElementById(`sts-${idx}`);
-  const cls={'참여예정':'s-plan','미참여':'s-skip','낙찰':'s-win','유찰':'s-fail','취소':'s-cancel'}[v]||'';
+  const cls={'ì°¸ì¬ìì ':'s-plan','ë¯¸ì°¸ì¬':'s-skip','ëì°°':'s-win','ì ì°°':'s-fail','ì·¨ì':'s-cancel'}[v]||'';
   s.className='status-sel '+cls;
-  showToast('상태 저장됨');
+  showToast('ìí ì ì¥ë¨');
 }
 
 function saveNote(key,idx){
   notes[key]=document.getElementById(`note-${idx}`).value;
   localStorage.setItem('g2b_notes',JSON.stringify(notes));
-  showToast('비고 저장됨');
+  showToast('ë¹ê³  ì ì¥ë¨');
 }
 
 function switchTab(tab){
@@ -778,11 +833,11 @@ function switchTab(tab){
   renderCards(getFiltered());
 }
 
-// ===== 엑셀 =====
+// ===== ìì =====
 function downloadExcel(){
-  if(!allResults.length){ showToast('데이터가 없습니다'); return; }
+  if(!allResults.length){ showToast('ë°ì´í°ê° ììµëë¤'); return; }
   const wb=XLSX.utils.book_new();
-  const hdr=['NO.','게시일','공고번호','공고명','공고기관','수요기관','입찰방식','배정예산','입찰마감일','상태','비고'];
+  const hdr=['NO.','ê²ìì¼','ê³µê³ ë²í¸','ê³µê³ ëª','ê³µê³ ê¸°ê´','ììê¸°ê´','ìì°°ë°©ì','ë°°ì ìì°','ìì°°ë§ê°ì¼','ìí','ë¹ê³ '];
   const rows=allResults.map((item,i)=>{
     const no=item.bidNtceNo||item.ntceNo||'';
     const key=no||item.bidNtceNm||'';
@@ -791,61 +846,61 @@ function downloadExcel(){
     const ntc=(item.ntceDt||item.bidNtceDt||'').slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3');
     return [i+1,ntc,no,item.bidNtceNm||item.ntceNm||'',item.ntceInsttNm||item.dminsttNm||'',item.dminsttNm||'',item.bidMethdNm||'',bud?parseInt(bud).toLocaleString():'',cls,statuses[key]||'',notes[key]||''];
   });
-  const ws=XLSX.utils.aoa_to_sheet([[searchType==='bid'?'● 실공고':'● 사전규격공개'],[`검색어: ${Array.from(selKw).join(', ')}`],[],hdr,...rows]);
+  const ws=XLSX.utils.aoa_to_sheet([[searchType==='bid'?'â ì¤ê³µê³ ':'â ì¬ì ê·ê²©ê³µê°'],[`ê²ìì´: ${Array.from(selKw).join(', ')}`],[],hdr,...rows]);
   ws['!cols']=[{wch:5},{wch:12},{wch:22},{wch:55},{wch:20},{wch:20},{wch:14},{wch:14},{wch:14},{wch:10},{wch:20}];
-  XLSX.utils.book_append_sheet(wb,ws,searchType==='bid'?'공고현황':'사전규격');
+  XLSX.utils.book_append_sheet(wb,ws,searchType==='bid'?'ê³µê³ íí©':'ì¬ì ê·ê²©');
   const t=new Date();
-  XLSX.writeFile(wb,`나라장터_${searchType==='bid'?'공고현황':'사전규격'}_${t.getFullYear()}${String(t.getMonth()+1).padStart(2,'0')}${String(t.getDate()).padStart(2,'0')}.xlsx`);
-  showToast(`${allResults.length}건 엑셀 저장 완료`);
+  XLSX.writeFile(wb,`ëë¼ì¥í°_${searchType==='bid'?'ê³µê³ íí©':'ì¬ì ê·ê²©'}_${t.getFullYear()}${String(t.getMonth()+1).padStart(2,'0')}${String(t.getDate()).padStart(2,'0')}.xlsx`);
+  showToast(`${allResults.length}ê±´ ìì ì ì¥ ìë£`);
 }
 
-// ===== 피드백 =====
+// ===== í¼ëë°± =====
 function submitFb(){
   const txt=document.getElementById('fbTa').value.trim();
-  if(!txt){ showToast('의견을 입력해주세요'); return; }
+  if(!txt){ showToast('ìê²¬ì ìë ¥í´ì£¼ì¸ì'); return; }
   feedbacks.push({type:activeFbType,text:txt,date:new Date().toLocaleDateString('ko-KR')});
   localStorage.setItem('g2b_fb',JSON.stringify(feedbacks));
   document.getElementById('fbTa').value='';
-  showToast('의견이 접수되었습니다. 감사합니다!');
+  showToast('ìê²¬ì´ ì ìëììµëë¤. ê°ì¬í©ëë¤!');
   renderFbList();
 }
 function renderFbList(){
   const list=document.getElementById('fbList');
   if(!feedbacks.length){ list.style.display='none'; return; }
   list.style.display='flex';
-  const colors={'불편사항':'#fee2e2;color:#dc2626','개선요청':'#eff4ff;color:#2563eb','오류신고':'#fef3c7;color:#d97706','기타의견':'#f1f3f6;color:#5a6070'};
+  const colors={'ë¶í¸ì¬í­':'#fee2e2;color:#dc2626','ê°ì ìì²­':'#eff4ff;color:#2563eb','ì¤ë¥ì ê³ ':'#fef3c7;color:#d97706','ê¸°íìê²¬':'#f1f3f6;color:#5a6070'};
   list.innerHTML=[...feedbacks].reverse().map(fb=>{
     const [bg,fg]=(colors[fb.type]||'#f1f3f6;color:#5a6070').split(';');
     return `<div class="fb-item"><div class="fb-item-hdr"><span class="fb-badge" style="background:${bg};${fg}">${fb.type}</span><span class="fb-date">${fb.date}</span></div><div style="font-size:12px;line-height:1.5">${esc(fb.text)}</div></div>`;
   }).join('');
 }
 function summarizeFb(){
-  if(!feedbacks.length){ showToast('접수된 의견이 없습니다'); return; }
+  if(!feedbacks.length){ showToast('ì ìë ìê²¬ì´ ììµëë¤'); return; }
   const cnt={};
   feedbacks.forEach(f=>cnt[f.type]=(cnt[f.type]||0)+1);
   const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
-  const recent=feedbacks.slice(-3).map(f=>`• [${f.type}] ${f.text.slice(0,40)}${f.text.length>40?'...':''}`).join('<br>');
+  const recent=feedbacks.slice(-3).map(f=>`â¢ [${f.type}] ${f.text.slice(0,40)}${f.text.length>40?'...':''}`).join('<br>');
   const el=document.getElementById('fbSummary');
   el.style.display='block';
-  el.innerHTML=`<div class="fb-summary"><strong>📊 의견 요약 (총 ${feedbacks.length}건)</strong><br>${Object.entries(cnt).map(([t,c])=>`${t}: ${c}건`).join(' · ')}<br>최다 유형: <strong>${top[0]} (${top[1]}건)</strong><br><br><strong>최근 의견</strong><br>${recent}</div>`;
+  el.innerHTML=`<div class="fb-summary"><strong>ð ìê²¬ ìì½ (ì´ ${feedbacks.length}ê±´)</strong><br>${Object.entries(cnt).map(([t,c])=>`${t}: ${c}ê±´`).join(' Â· ')}<br>ìµë¤ ì í: <strong>${top[0]} (${top[1]}ê±´)</strong><br><br><strong>ìµê·¼ ìê²¬</strong><br>${recent}</div>`;
   renderFbList();
 }
 
-// ===== API/이메일 =====
+// ===== API/ì´ë©ì¼ =====
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function saveApiKey(){
   const k=document.getElementById('apiKeyInput').value.trim();
-  if(!k){ showToast('API 키를 입력하세요'); return; }
-  localStorage.setItem('g2b_api',k); setApiDot(true); closeModal('apiModal'); showToast('API 키 저장됨');
+  if(!k){ showToast('API í¤ë¥¼ ìë ¥íì¸ì'); return; }
+  localStorage.setItem('g2b_api',k); setApiDot(true); closeModal('apiModal'); showToast('API í¤ ì ì¥ë¨');
 }
 function setApiDot(ok){
   document.getElementById('apiDot').style.background=ok?'var(--green)':'var(--amber)';
-  document.getElementById('apiTxt').textContent=ok?'API 연결됨':'API 키 필요';
+  document.getElementById('apiTxt').textContent=ok?'API ì°ê²°ë¨':'API í¤ íì';
 }
 function saveEmail(){
   const e=document.getElementById('emailInp').value.trim(); if(!e) return;
-  localStorage.setItem('g2b_email',e); document.getElementById('emailOk').style.display='inline'; showToast('이메일 저장됨');
+  localStorage.setItem('g2b_email',e); document.getElementById('emailOk').style.display='inline'; showToast('ì´ë©ì¼ ì ì¥ë¨');
 }
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
