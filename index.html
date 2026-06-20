@@ -1244,8 +1244,8 @@ async function startPreSearch(sd, ed) {
   emptyEl.appendChild(descDiv);
   document.getElementById('statsRow').style.display = 'none';
   document.getElementById('resultArea').style.display = 'none';
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> \uC804\uCCB4 \uAC80\uC0C9';
+  document.getElementById('searchBtn').disabled = false;
+  document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> \uC804\uCCB4 \uAC80\uC0C9';
   document.getElementById('loadBar').classList.remove('on');
   return;
 }
