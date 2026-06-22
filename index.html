@@ -13,7 +13,7 @@
   --green:#16a34a; --green-l:#f0fdf4;
   --amber:#d97706; --amber-l:#fffbeb;
   --red:#dc2626; --red-l:#fef2f2;hh
-  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;h
+  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;hh
   --r-sm:6px; --r-md:10px; --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -44,10 +44,11 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .email-desc{font-size:11px;color:var(--th);margin-top:6px;}
 
 /* 검색유형 탭 */
-.stype-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);width:fit-content;}
-.stype-btn{padding:8px 24px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--surface);color:var(--ts);transition:all 0.15s;border-right:1px solid var(--border);}
+.stype-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;border:2px solid #2563eb;width:fit-content;}
+.stype-btn{padding:8px 24px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:#dbeafe;color:#1e40af;transition:all 0.15s;border-right:1px solid #93c5fd;}
 .stype-btn:last-child{border-right:none;}
-.stype-btn.active{background:var(--blue);color:#fff;}
+.stype-btn.active{background:#2563eb;color:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,0.15);}
+.stype-btn:hover:not(.active){background:#bfdbfe;color:#1e3a8a;}
 
 /* 검색 패널 */
 .sp{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 22px;margin-bottom:14px;}
