@@ -685,15 +685,8 @@ async function startPreSearch(sd, ed) {
 
   document.getElementById('loadBar').classList.remove('on');
 
-}te(wAgo.getDate()-7);
-  const nw=allResults.filter(r=>new Date(r.ntceDt||r.bidNtceDt||0)>=wAgo).length;
-  document.getElementById('sTot').textContent=allResults.length;
-  document.getElementById('sUrg').textContent=urg;
-  document.getElementById('sNew').textContent=nw;
-  document.getElementById('statsRow').style.display='grid';
-  renderCards(getFiltered());
-  showToast(`${allResults.length}건 검색 완료`);
 }
+
 
 function getFiltered(){
   switch(currentTab){
