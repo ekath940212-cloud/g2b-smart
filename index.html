@@ -6,14 +6,14 @@
 <title>나라장터 스마트 검색</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
+:root {h
   --bg:#f7f8fa; --surface:#fff; --hborder:#e2e5eb;
   --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;h
   --blue:#2563eb; --blue-l:#eff4ff; --blue-m:#93b8f8;
   --green:#16a34a; --green-l:#f0fdf4;
   --amber:#d97706; --amber-l:#fffbeb;
   --red:#dc2626; --red-l:#fef2f2;hh
-  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;
+  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;h
   --r-sm:6px; --r-md:10px; --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -613,59 +613,79 @@ async function startSearch(){
 }
 
 async function startPreSearch(sd, ed) {
-  // Pre-spec is Nara Jangter internal session API - cannot call directly
-  const keywords = Array.from(selKw);
-  const kwText = keywords.join(', ');
-  try {
-    await navigator.clipboard.writeText(kwText);
-    showToast('Keywords copied! Paste in Nara Jangter');
-  } catch(e) {
-    showToast('Keywords: ' + kwText);
-  }
-  window.open('https://www.g2b.go.kr/', '_blank');
-  allResults = [];
-  const emptyEl = document.getElementById('emptyState');
-  emptyEl.style.display = 'block';
-  emptyEl.innerHTML = '';
-  const iconDiv = document.createElement('div');
-  iconDiv.className = 'empty-icon';
-  iconDiv.textContent = '\uD83D\uDCCC';
-  emptyEl.appendChild(iconDiv);
-  const titleDiv = document.createElement('div');
-  titleDiv.className = 'empty-title';
-  titleDiv.textContent = '\uC0AC\uC804\uADDC\uACA9\uACF5\uAC1C \uC548\uB0B4';
-  emptyEl.appendChild(titleDiv);
-  const descDiv = document.createElement('div');
-  descDiv.className = 'empty-desc';
-  const p1 = document.createElement('p');
-  p1.innerHTML = '\uB098\uB77C\uC7A5\uD130\uAC00 \uC0C8 \uD0ED\uC73C\uB85C \uC5F4\uB838\uC5B4\uC694.<br><br>' +
-    '<strong>\u2460 \uBC1C\uC8FC &rarr; \uBC1C\uC8FC\uBAA9\uB85D &rarr; \uC0AC\uC804\uADDC\uACA9\uACF5\uAC1C \uD0ED \uD074\uB9AD</strong><br>' +
-    '<strong>\u2461 \uC0AC\uC5C5\uBA85\uC5D0 \uC544\uB798 \uD0A4\uC6CC\uB4DC \uBD99\uC5EC\uB123\uAE30 (Ctrl+V)</strong>';
-  descDiv.appendChild(p1);
-  const kwSpan = document.createElement('span');
-  kwSpan.style.cssText = 'background:var(--blue-l);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;display:inline-block;margin:8px 0';
-  kwSpan.textContent = kwText;
-  descDiv.appendChild(kwSpan);
-  const copyBtn = document.createElement('button');
-  copyBtn.style.cssText = 'display:block;margin-top:8px;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-md);font-size:13px;cursor:pointer';
-  copyBtn.textContent = '\uD83D\uDCCB \uD0A4\uC6CC\uB4DC \uB2E4\uC2DC \uBCF5\uC0AC';
-  copyBtn.onclick = () => navigator.clipboard.writeText(kwText).then(() => showToast('Copied!'));
-  descDiv.appendChild(copyBtn);
-  emptyEl.appendChild(descDiv);
-  document.getElementById('statsRow').style.display = 'none';
-  document.getElementById('resultArea').style.display = 'none';
-  document.getElementById('searchBtn').disabled = false;
-  document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> \uC804\uCCB4 \uAC80\uC0C9';
-  document.getElementById('loadBar').classList.remove('on');
-  return;
-}
 
-// ===== 결과 렌더 =====
-function renderResults(){
-  document.getElementById('rCount').textContent=allResults.length;
-  document.getElementById('resultArea').style.display='block';
-  const urg=allResults.filter(r=>{const d=getDday(r);return d!==null&&d>=0&&d<=7;}).length;
-  const wAgo=new Date(); wAgo.setDate(wAgo.getDate()-7);
+  const keywords = Array.from(selKw);
+
+  const filters = Array.from(selFil);
+
+  const dateChunks = [];
+
+  let chunkCur = new Date(sd.slice(0,4)+'-'+sd.slice(4,6)+'-'+sd.slice(6,8));
+
+  const chunkEnd = new Date(ed.slice(0,4)+'-'+ed.slice(4,6)+'-'+ed.slice(6,8));
+
+  const fmtD = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'00')}${String(d.getDate()).padStart(2,'00')}`;
+
+  while (chunkCur <= chunkEnd) {
+
+    const next = new Date(chunkCur); next.setDate(next.getDate()+29);
+
+    if (next > chunkEnd) next.setTime(chunkEnd.getTime());
+
+    dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
+
+    chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
+
+  }
+
+  const searchCombos = filters.length > 0
+    ? filters.flatMap(f => keywords.map(kw => ({ main: f, sub: kw })))
+    : keywords.map(kw => ({ main: kw, sub: null }));
+
+  const promises = searchCombos.flatMap(({ main, sub }) =>
+    dateChunks.map(({ csd, ced }) => {
+      let url = `/api/prespec?keyword=${encodeURIComponent(main)}&startDt=${csd}&endDt=${ced}`;
+      return fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          let items = (data.items || []).map(i => ({ ...i, _kw: main }));
+          if (sub) {
+            items = items.filter(item => {
+              const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g,'');
+              return nm.includes(sub.toLowerCase().replace(/\s/g,''));
+            });
+          }
+          kwCounts[main] = (kwCounts[main] || 0) + items.length;
+          return items;
+        })
+        .catch(() => []);
+    })
+  );
+
+  let raw = (await Promise.all(promises)).flat();
+
+  const seen = new Set();
+
+  raw = raw.filter(item => {
+    const id = item.prcrmntReqNo || item.bfSpecRgsNo || JSON.stringify(item).slice(0,50);
+    if (seen.has(id)) return false; seen.add(id); return true;
+  });
+
+  raw.sort((a, b) => new Date(b.ntceDt||0) - new Date(a.ntceDt||0));
+
+  allResults = raw;
+
+  renderKw();
+
+  renderResults();
+
+  document.getElementById('searchBtn').disabled = false;
+
+  document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
+
+  document.getElementById('loadBar').classList.remove('on');
+
+}te(wAgo.getDate()-7);
   const nw=allResults.filter(r=>new Date(r.ntceDt||r.bidNtceDt||0)>=wAgo).length;
   document.getElementById('sTot').textContent=allResults.length;
   document.getElementById('sUrg').textContent=urg;
