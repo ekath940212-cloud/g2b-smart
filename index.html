@@ -677,6 +677,10 @@ async function startPreSearch(sd, ed) {
 
   renderKw();
 
+  document.getElementById('emptyState').style.display = 'none';
+
+  document.getElementById('resultArea').style.display = 'block';
+
   renderCards(getFiltered());
 
   document.getElementById('searchBtn').disabled = false;
