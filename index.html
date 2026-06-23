@@ -533,6 +533,21 @@ function getRange(){
 }
 
 // ===== 검색 =====
+function renderResults(){
+  document.getElementById('rCount').textContent=allResults.length;
+  document.getElementById('resultArea').style.display='block';
+  document.getElementById('emptyState').style.display='none';
+  const urg=allResults.filter(r=>{const d=getDday(r);return d!==null&&d>=0&&d<=7;}).length;
+  const wAgo=new Date();wAgo.setDate(wAgo.getDate()-7);
+  const nw=allResults.filter(r=>new Date(r.ntceDt||r.bidNtceDt||0)>=wAgo).length;
+  document.getElementById('sTot').textContent=allResults.length;
+  document.getElementById('sUrg').textContent=urg;
+  document.getElementById('sNew').textContent=nw;
+  document.getElementById('statsRow').style.display='grid';
+  renderCards(getFiltered());
+  showToast(allResults.length+'건 검색 완료');
+}
+
 async function startSearch(){
   if(selKw.size===0){ showToast('키워드를 1개 이상 선택하세요'); return; }
 
