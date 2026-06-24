@@ -11,7 +11,7 @@
   --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;h
   --blue:#2563eb; --blue-l:#eff4ff; --blue-m:#93b8f8;
   --green:#16a34a; --green-l:#f0fdf4;
-  --amber:#d97706; --amber-l:#fffbeb;
+  --amber:#d97706; --amber-l:#fffbeb;h
   --red:#dc2626; --red-l:#fef2f2;hh
   --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;hh
   --r-sm:6px; --r-md:10px; --r-lg:14px;
@@ -627,80 +627,78 @@ async function startSearch(){
 
 async function startPreSearch(sd, ed) {
 
-  const keywords = Array.from(selKw);
+const keywords = Array.from(selKw);
 
-  const filters = Array.from(selFil);
+const filters = Array.from(selFil);
 
-  const dateChunks = [];
+const dateChunks = [];
 
-  let chunkCur = new Date(sd.slice(0,4)+'-'+sd.slice(4,6)+'-'+sd.slice(6,8));
+let chunkCur = new Date(sd.slice(0,4)+'-'+sd.slice(4,6)+'-'+sd.slice(6,8));
 
-  const chunkEnd = new Date(ed.slice(0,4)+'-'+ed.slice(4,6)+'-'+ed.slice(6,8));
+const chunkEnd = new Date(ed.slice(0,4)+'-'+ed.slice(4,6)+'-'+ed.slice(6,8));
 
-  const fmtD = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'00')}${String(d.getDate()).padStart(2,'00')}`;
+// padStart(2,'0') 오타 수정: '00' -> '0'
+const fmtD = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
 
-  while (chunkCur <= chunkEnd) {
+while (chunkCur <= chunkEnd) {
 
-    const next = new Date(chunkCur); next.setDate(next.getDate()+29);
+const next = new Date(chunkCur); next.setDate(next.getDate()+29);
 
-    if (next > chunkEnd) next.setTime(chunkEnd.getTime());
+if (next > chunkEnd) next.setTime(chunkEnd.getTime());
 
-    dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
+dateChunks.push({ csd: fmtD(chunkCur), ced: fmtD(next) });
 
-    chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
+chunkCur = new Date(next); chunkCur.setDate(chunkCur.getDate()+1);
 
-  }
+}
 
-  const searchCombos = filters.length > 0
-    ? filters.flatMap(f => keywords.map(kw => ({ main: f, sub: kw })))
-    : keywords.map(kw => ({ main: kw, sub: null }));
+// 키워드별로 날짜 청크 분할 검색 (filters는 사전규격에서는 사용 안함)
+const promises = keywords.flatMap(kw =>
+dateChunks.map(({ csd, ced }) => {
+let url = `/api/prespec?keyword=${encodeURIComponent(kw)}&startDt=${csd}&endDt=${ced}`;
+return fetch(url)
+.then(r => r.json())
+.then(data => {
+let items = (data.items || []).map(i => ({ ...i, _kw: kw }));
+kwCounts[kw] = (kwCounts[kw] || 0) + items.length;
+return items;
+})
+.catch(() => []);
+})
+);
 
-  const promises = searchCombos.flatMap(({ main, sub }) =>
-    dateChunks.map(({ csd, ced }) => {
-      let url = `/api/prespec?keyword=${encodeURIComponent(main)}&startDt=${csd}&endDt=${ced}`;
-      return fetch(url)
-        .then(r => r.json())
-        .then(data => {
-          let items = (data.items || []).map(i => ({ ...i, _kw: main }));
-          if (sub) {
-            items = items.filter(item => {
-              const nm = (item.bidNtceNm || '').toLowerCase().replace(/\s/g,'');
-              return nm.includes(sub.toLowerCase().replace(/\s/g,''));
-            });
-          }
-          kwCounts[main] = (kwCounts[main] || 0) + items.length;
-          return items;
-        })
-        .catch(() => []);
-    })
-  );
+let raw = (await Promise.all(promises)).flat();
 
-  let raw = (await Promise.all(promises)).flat();
+// 중복 제거 (사전규격 등록번호 기준)
+const seen = new Set();
 
-  const seen = new Set();
+raw = raw.filter(item => {
+const id = item.prcrmntReqNo || item.bfSpecRgstNo || item.bfSpecRgsNo || JSON.stringify(item).slice(0,50);
+if (seen.has(id)) return false; seen.add(id); return true;
+});
 
-  raw = raw.filter(item => {
-    const id = item.prcrmntReqNo || item.bfSpecRgsNo || JSON.stringify(item).slice(0,50);
-    if (seen.has(id)) return false; seen.add(id); return true;
-  });
+// 업무유형 필터 적용: 물품분류번호명(prdctClsfcNoNm) 기준
+if (filters.length > 0) {
+raw = raw.filter(item => {
+const nm = (item.prdctClsfcNoNm || item.bidNtceNm || '').toLowerCase().replace(/\s/g,'');
+return filters.some(f => nm.includes(f.toLowerCase().replace(/\s/g,'')));
+});
+}
 
-  raw.sort((a, b) => new Date(b.ntceDt||0) - new Date(a.ntceDt||0));
+// 최신 등록일 기준 정렬
+raw.sort((a, b) => new Date(b.ntceDt||0) - new Date(a.ntceDt||0));
 
-  allResults = raw;
+allResults = raw;
 
-  renderKw();
+renderKw();
 
-  document.getElementById('emptyState').style.display = 'none';
+renderResults();
 
-  document.getElementById('resultArea').style.display = 'block';
+document.getElementById('searchBtn').disabled = false;
 
-  renderCards(getFiltered());
+document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
 
-  document.getElementById('searchBtn').disabled = false;
-
-  document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
-
-  document.getElementById('loadBar').classList.remove('on');
+document.getElementById('loadBar').classList.remove('on');
 
 }
 
