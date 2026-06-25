@@ -849,16 +849,18 @@ function downloadExcel(){
 }
 
 // ===== 피드백 =====
-function submitFb(){
+function hh(){
   const txt=document.getElementById('fbTa').value.trim();
   if(!txt){ showToast('의견을 입력해주세요'); return; }
   feedbacks.push({type:activeFbType,text:txt,date:new Date().toLocaleDateString('ko-KR')});
   localStorage.setItem('g2b_fb',JSON.stringify(feedbacks));
   document.getElementById('fbTa').value='';
   showToast('의견이 접수되었습니다. 감사합니다!');
+  fetch('https://script.google.com/macros/s/AKfycbxLWzRSnE-7UneQACVPuQ-nPm8LElGoy1-Xs1Nu8VN1koMmcLI8eqlnbFFHWyHUL8ME2Q/exec',{method:'POST',mode:'no-cors',body:JSON.stringify({type:activeFbType,message:txt,userAgent:navigator.userAgent})});  
   renderFbList();
 }
 function renderFbList(){
+
   const list=document.getElementById('fbList');
   if(!feedbacks.length){ list.style.display='none'; return; }
   list.style.display='flex';
@@ -899,8 +901,6 @@ function saveEmail(){
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
-
-init();
 </script>
 </body>
 </html>
