@@ -380,10 +380,10 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     </div>
     <textarea class="fb-ta" id="fbTa" placeholder="불편하셨던 점이나 개선 요청사항을 자유롭게 작성해주세요..."></textarea>
     <div class="fb-actions">
-      <button class="btn-sm" onclick="summarizeFb()">📊 의견 요약</button>
+      
       <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="submitFb()">제출</button>
     </div>
-    <div id="fbSummary" style="display:none"></div>
+    
     <div class="fb-list" id="fbList" style="display:none"></div>
   </div>
 
@@ -864,17 +864,6 @@ function renderFbList(){
     const [bg,fg]=(colors[fb.type]||'#f1f3f6;color:#5a6070').split(';');
     return `<div class="fb-item"><div class="fb-item-hdr"><span class="fb-badge" style="background:${bg};${fg}">${fb.type}</span><span class="fb-date">${fb.date}</span></div><div style="font-size:12px;line-height:1.5">${esc(fb.text)}</div></div>`;
   }).join('');
-}
-function summarizeFb(){
-  if(!feedbacks.length){ showToast('접수된 의견이 없습니다'); return; }
-  const cnt={};
-  feedbacks.forEach(f=>cnt[f.type]=(cnt[f.type]||0)+1);
-  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
-  const recent=feedbacks.slice(-3).map(f=>`• [${f.type}] ${f.text.slice(0,40)}${f.text.length>40?'...':''}`).join('<br>');
-  const el=document.getElementById('fbSummary');
-  el.style.display='block';
-  el.innerHTML=`<div class="fb-summary"><strong>📊 의견 요약 (총 ${feedbacks.length}건)</strong><br>${Object.entries(cnt).map(([t,c])=>`${t}: ${c}건`).join(' · ')}<br>최다 유형: <strong>${top[0]} (${top[1]}건)</strong><br><br><strong>최근 의견</strong><br>${recent}</div>`;
-  renderFbList();
 }
 
 // ===== API/이메일 =====
