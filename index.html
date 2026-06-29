@@ -35,13 +35,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .ad-txt{flex:1;text-align:center;font-size:12px;color:#4338ca;}
 .ad-x{font-size:16px;color:var(--th);cursor:pointer;padding:2px 5px;}
 
-/* 이메일 */
-.email-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 20px;margin-bottom:14px;}
-.panel-ttl{font-size:11px;font-weight:700;color:var(--th);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;}
-.email-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.email-inp{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;outline:none;}
-.email-inp:focus{border-color:var(--blue-m);}
-.email-desc{font-size:11px;color:var(--th);margin-top:6px;}
+
 
 /* 검색유형 탭 */
 .stype-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;border:2px solid #2563eb;width:fit-content;}
@@ -203,7 +197,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 
 /* 인쇄 (건의④) */
 @media print {
-  .hdr,.ad-top,.email-panel,.search-actions,.tab-bar,.result-actions,.card-actions,.fb-panel,.toast,.modal-bg{display:none!important;}
+  .hdr,.ad-top,.search-actions,.tab-bar,.result-actions,.card-actions,.fb-panel,.toast,.modal-bg{display:none!important;}
   .bid-card{break-inside:avoid;border:1px solid #ccc!important;margin-bottom:8px;box-shadow:none;}
   body{background:#fff;}
 }
@@ -260,16 +254,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <span class="ad-x" onclick="document.getElementById('adTop').style.display='none'">×</span>
   </div>
 
-  <!-- 이메일 알림 -->
-  <div class="email-panel">
-    <div class="panel-ttl">📬 평일 자동 알림</div>
-    <div class="email-row">
-      <input class="email-inp" id="emailInp" type="email" placeholder="알림받을 이메일 주소"/>
-      <button class="btn-sm" onclick="saveEmail()">저장</button>
-      <span id="emailOk" style="font-size:12px;color:var(--green);display:none">✓ 저장됨</span>
-    </div>
-    <div class="email-desc">주말·공휴일 제외 평일 오전, 신규 공고 발생 시 자동 이메일 발송</div>
-  </div>
+
 
   <!-- 검색 유형 -->
   <div class="stype-bar">
@@ -432,7 +417,6 @@ function init() {
 
 function loadStorage() {
   const k=localStorage.getItem('g2b_api'); if(k) setApiDot(true);
-  const e=localStorage.getItem('g2b_email'); if(e){ document.getElementById('emailInp').value=e; document.getElementById('emailOk').style.display='inline'; }
   notes=JSON.parse(localStorage.getItem('g2b_notes')||'{}');
   statuses=JSON.parse(localStorage.getItem('g2b_statuses')||'{}');
   feedbacks=JSON.parse(localStorage.getItem('g2b_fb')||'[]');
@@ -903,10 +887,6 @@ function saveApiKey(){
 function setApiDot(ok){
   document.getElementById('apiDot').style.background=ok?'var(--green)':'var(--amber)';
   document.getElementById('apiTxt').textContent=ok?'API 연결됨':'API 키 필요';
-}
-function saveEmail(){
-  const e=document.getElementById('emailInp').value.trim(); if(!e) return;
-  localStorage.setItem('g2b_email',e); document.getElementById('emailOk').style.display='inline'; showToast('이메일 저장됨');
 }
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
