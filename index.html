@@ -6,18 +6,18 @@
 <title>나라장터 스마트 검색</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {h
-  --bg:#eef2f7; --surface:#f8fafc; --border:#cbd5e1;h
-  --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;h
+:root {
+  --bg:#eef2f7; --surface:#f8fafc; --border:#cbd5e1;
+  --tp:#1a1d23; --ts:#5a6070; --th:#9aa0ad;
   --blue:#2563eb; --blue-l:#eff4ff; --blue-m:#93b8f8;
   --green:#16a34a; --green-l:#f0fdf4;
-  --amber:#d97706; --amber-l:#fffbeb;h
-  --red:#dc2626; --red-l:#fef2f2;hh
-  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;hh
+  --amber:#d97706; --amber-l:#fffbeb;
+  --red:#dc2626; --red-l:#fef2f2;
+  --gray:#f1f3f6; --purple:#7c3aed; --purple-l:#f5f3ff;
   --r-sm:6px; --r-md:10px; --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;background:var(--bg);color:varh(--tp);font-size:14px;line-height:1.6;}
+body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;background:var(--bg);color:var(--tp);font-size:14px;line-height:1.6;}
 
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
 .hdr-l{display:flex;align-items:center;gap:10px;}
@@ -34,8 +34,6 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .ad-lbl{font-size:10px;color:#818cf8;font-weight:700;letter-spacing:0.5px;white-space:nowrap;}
 .ad-txt{flex:1;text-align:center;font-size:12px;color:#4338ca;}
 .ad-x{font-size:16px;color:var(--th);cursor:pointer;padding:2px 5px;}
-
-
 
 /* 검색유형 탭 */
 .stype-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;border:2px solid #2563eb;width:fit-content;}
@@ -134,7 +132,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .dday-x{background:var(--gray);color:var(--th);}
 .dday-p{background:var(--purple-l);color:var(--purple);}
 
-/* 상태 드롭다운 (건의①) */
+/* 상태 드롭다운 */
 .status-sel{padding:3px 8px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;outline:none;background:var(--surface);color:var(--ts);}
 .status-sel.s-plan{border-color:#3b82f6;background:#eff6ff;color:#2563eb;}
 .status-sel.s-skip{border-color:var(--border);background:var(--gray);color:var(--th);}
@@ -149,7 +147,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .tag-pre{background:var(--purple-l);color:var(--purple);}
 .tag-new{background:#dcfce7;color:var(--green);}
 
-/* 카드 액션 (건의③) */
+/* 카드 액션 */
 .card-actions{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap;}
 .btn-g2b{display:flex;align-items:center;gap:4px;padding:5px 11px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);border-radius:var(--r-sm);font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;}
 .btn-g2b:hover{background:#dbeafe;}
@@ -178,7 +176,6 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .fb-item-hdr{display:flex;justify-content:space-between;margin-bottom:3px;}
 .fb-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;}
 .fb-date{font-size:10px;color:var(--th);}
-.fb-summary{background:var(--blue-l);border:1px solid var(--blue-m);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:#1e40af;margin-top:8px;line-height:1.7;}
 
 /* 모달 */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;display:none;}
@@ -195,7 +192,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .toast{position:fixed;bottom:24px;right:24px;background:var(--tp);color:#fff;padding:11px 16px;border-radius:var(--r-md);font-size:13px;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 
-/* 인쇄 (건의④) */
+/* 인쇄 */
 @media print {
   .hdr,.ad-top,.search-actions,.tab-bar,.result-actions,.card-actions,.fb-panel,.toast,.modal-bg{display:none!important;}
   .bid-card{break-inside:avoid;border:1px solid #ccc!important;margin-bottom:8px;box-shadow:none;}
@@ -219,18 +216,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
   </div>
 </header>
 
-<!-- API 모달 -->
-<div class="modal-bg" id="apiModal" style="display:none!important">
-  <div class="modal">
-    <div class="modal-ttl">API 키 설정</div>
-    <div class="modal-desc">공공데이터포털(data.go.kr)에서 발급받은 <strong>일반 인증키(Encoding)</strong>를 입력하세요.<br>키는 브라우저 로컬스토리지에만 저장됩니다.</div>
-    <input class="modal-inp mono" id="apiKeyInput" type="text" placeholder="인증키 붙여넣기"/>
-    <div class="modal-acts">
-      <button class="btn-sm" onclick="closeModal('apiModal')">취소</button>
-      <button class="btn-primary" style="padding:7px 16px;font-size:13px" onclick="saveApiKey()">저장</button>
-    </div>
-  </div>
-</div>
+/div>
 
 <!-- 키워드/필터 추가 모달 -->
 <div class="modal-bg" id="addModal">
@@ -253,8 +239,6 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <div class="ad-txt">🏗️ <strong>엔지니어링 전문 인력 채용</strong> — 환경·플랜트 설계 경력직 모집 중 &nbsp;<a href="#" style="color:#4338ca;font-size:11px;font-weight:600" onclick="return false">자세히 보기 →</a></div>
     <span class="ad-x" onclick="document.getElementById('adTop').style.display='none'">×</span>
   </div>
-
-
 
   <!-- 검색 유형 -->
   <div class="stype-bar">
@@ -329,7 +313,6 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <div class="result-hdr">
       <div class="result-cnt">검색결과 <strong id="rCount">0</strong>건</div>
       <div class="result-actions">
-        <!-- 건의④: 인쇄/PDF -->
         <button class="btn-print" onclick="window.print()">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           인쇄/PDF
@@ -394,12 +377,12 @@ let KW2 = ['실시설계','기본설계','타당성','기본계획','기본 및 
 let selKw = new Set(KW1);
 let selFil = new Set(KW2);
 let allResults = [];
-let kwCounts = {}; // 건의①: 키워드별 결과수
+let kwCounts = {}; 
 let currentSort = 'ntce'; // 정렬: ntce=최신순, close=마감임박순
 let currentTab = 'all';
 let searchType = 'bid';
 let notes = {};
-let statuses = {}; // 건의①: 공고 상태
+let statuses = {}; 
 let feedbacks = [];
 let curPeriod = '1m';
 let activeFbType = '사용자 의견';
@@ -416,7 +399,6 @@ function init() {
 }
 
 function loadStorage() {
-  const k=localStorage.getItem('g2b_api'); if(k) setApiDot(true);
   notes=JSON.parse(localStorage.getItem('g2b_notes')||'{}');
   statuses=JSON.parse(localStorage.getItem('g2b_statuses')||'{}');
   feedbacks=JSON.parse(localStorage.getItem('g2b_fb')||'[]');
@@ -440,7 +422,7 @@ function setType(t) {
   document.getElementById('emptyState').style.display='block';
 }
 
-// ===== 키워드 렌더 (건의②: 키워드별 결과수 표시) =====
+// ===== 키워드 렌더 =====
 function renderKw() {
   document.getElementById('kwGrid').innerHTML =
     KW1.map(kw => `
@@ -600,8 +582,7 @@ async function startSearch(){
     raw.sort((a,b)=>new Date(b.ntceDt||b.bidNtceDt||b.bidClseDt||0)-new Date(a.ntceDt||a.bidNtceDt||a.bidClseDt||0));
 
     allResults=raw;
-    renderKw(); // 건의②: 검색 후 키워드 카운트 업데이트
-    renderResults();
+    renderKw();     renderResults();
   } catch(e){
     console.error(e); showToast('오류: '+e.message);
     document.getElementById('emptyState').style.display='block';
@@ -689,7 +670,6 @@ document.getElementById('loadBar').classList.remove('on');
 
 }
 
-
 function getFiltered(){
   let items;
   switch(currentTab){
@@ -751,7 +731,6 @@ function renderCards(items){
           <a class="card-title-link" href="${g2bUrl}" target="_blank" rel="noopener">${esc(title)}</a>
         </div>
         <div class="card-badges">
-          <!-- 건의①: 상태 드롭다운 -->
           <select class="status-sel ${statusClass}" id="sts-${idx}" onchange="saveStatus('${esc(ntceNo||title)}',${idx})">
             <option value="">상태미정</option>
             <option value="참여예정" ${status==='참여예정'?'selected':''}>참여예정</option>
@@ -776,7 +755,6 @@ function renderCards(items){
         ${isNew?`<span class="tag tag-new">NEW</span>`:''}
         ${getTags(title).map(t=>`<span class="tag">${t}</span>`).join('')}
       </div>
-      <!-- 건의③: 나라장터 바로가기 버튼 + 비고 -->
       <div class="card-actions">
         <a class="btn-g2b" href="https://www.g2b.go.kr/" target="_blank" rel="noopener">
           <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -805,7 +783,6 @@ function getTags(t){
   return tags.slice(0,4);
 }
 
-// 건의①: 상태 저장
 function saveStatus(key,idx){
   const v=document.getElementById(`sts-${idx}`).value;
   statuses[key]=v; localStorage.setItem('g2b_statuses',JSON.stringify(statuses));
@@ -876,18 +853,9 @@ function renderFbList(){
   }).join('');
 }
 
-// ===== API/이메일 =====
+// ===== 모달 =====
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function saveApiKey(){
-  const k=document.getElementById('apiKeyInput').value.trim();
-  if(!k){ showToast('API 키를 입력하세요'); return; }
-  localStorage.setItem('g2b_api',k); setApiDot(true); closeModal('apiModal'); showToast('API 키 저장됨');
-}
-function setApiDot(ok){
-  document.getElementById('apiDot').style.background=ok?'var(--green)':'var(--amber)';
-  document.getElementById('apiTxt').textContent=ok?'API 연결됨':'API 키 필요';
-}
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
