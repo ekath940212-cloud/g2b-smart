@@ -403,7 +403,7 @@ function loadStorage() {
   statuses=JSON.parse(localStorage.getItem('g2b_statuses')||'{}');
   feedbacks=JSON.parse(localStorage.getItem('g2b_fb')||'[]');
   const k1=localStorage.getItem('g2b_kw1'); if(k1){ KW1=JSON.parse(k1); }
-  const k2=localStorage.getItem('g2b_kw2'); if(k2){ KW2=JSON.parse(k2); }
+  const k2=localStorage.getItem('g2b_kw2'); if(k2){ const _p=JSON.parse(k2); if(_p.length>=8) KW2=_p; else localStorage.removeItem('g2b_kw2'); }
   selKw=new Set(KW1); selFil=new Set(KW2);
   renderKw(); renderFilters();
 }
