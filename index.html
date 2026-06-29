@@ -17,7 +17,7 @@
   --r-sm:6px; --r-md:10px; --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;background:var(--bg);color:var(--tp);font-size:14px;line-height:1.6;}
+body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;background:var(--bg);color:varh(--tp);font-size:14px;line-height:1.6;}
 
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
 .hdr-l{display:flex;align-items:center;gap:10px;}
@@ -606,7 +606,7 @@ async function startSearch(){
     raw=raw.filter(item=>{ const id=item.bidNtceNo||item.ntceNo||item.prdctClsfcNo||JSON.stringify(item).slice(0,60); if(seen.has(id)) return false; seen.add(id); return true; });
 
     // 정렬 (최신순)
-    raw.sort((a,b)=>new Date(b.bidClseDt||b.opengDt||b.ntceDt||0)-new Date(a.bidClseDt||a.opengDt||a.ntceDt||0));
+    raw.sort((a,b)=>new Date(b.ntceDt||b.bidNtceDt||b.bidClseDt||0)-new Date(a.ntceDt||a.bidNtceDt||a.bidClseDt||0));
 
     allResults=raw;
     renderKw(); // 건의②: 검색 후 키워드 카운트 업데이트
