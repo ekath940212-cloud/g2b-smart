@@ -218,6 +218,42 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 
 /div>
 
+<!-- 사용설명서 모달 -->
+<div class="modal-bg" id="helpModal">
+  <div class="modal" style="width:560px;max-height:85vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div class="modal-ttl" style="margin-bottom:0;">📖 사용설명서</div>
+      <button class="btn-sm" onclick="closeModal('helpModal')" style="padding:4px 10px;">닫기</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:13px;line-height:1.7;">
+      <div style="background:var(--blue-l);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:6px;">📋 입찰공고 / 📌 사전규격공개</div>
+        <div style="color:var(--ts);">검색할 공고 유형을 선택합니다.<br>· <b>입찰공고</b>: 실제 입찰이 진행 중인 공고. 마감일과 D-day를 확인하세요.<br>· <b>사전규격공개</b>: 입찰 공고 전 단계로 수요기관이 규격을 미리 공개합니다. 의견 등록 기간을 확인하세요.</div>
+      </div>
+      <div style="background:var(--gray);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--ts);margin-bottom:6px;">🔍 검색 키워드</div>
+        <div style="color:var(--ts);">원하는 키워드를 클릭해 선택·해제합니다. 여러 개 선택 시 OR 조건으로 검색됩니다.<br>· <b>전체선택</b>: 모든 키워드 선택 / <b>선택해제</b>: 모든 키워드 해제<br>· <b>+ 키워드 추가</b>: 원하는 키워드를 직접 추가 (저장됩니다)</div>
+      </div>
+      <div style="background:var(--gray);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--ts);margin-bottom:6px;">🗂 업무 유형 필터</div>
+        <div style="color:var(--ts);">선택한 유형 키워드가 공고명에 포함된 건만 표시합니다.<br>· <b>+ 유형 추가</b>: 원하는 유형을 직접 추가할 수 있습니다.</div>
+      </div>
+      <div style="background:var(--gray);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--ts);margin-bottom:6px;">📅 검색기간</div>
+        <div style="color:var(--ts);">공고 게시일 기준으로 조회 기간을 설정합니다. 1일 / 1주 / 1개월(기본) / 3개월 또는 직접 입력 가능합니다.</div>
+      </div>
+      <div style="background:var(--gray);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--ts);margin-bottom:6px;">🃏 검색 결과 카드</div>
+        <div style="color:var(--ts);">· <b>D-day 뱃지</b>: 마감까지 남은 일수 (D-7 이하 빨간색)<br>· <b>상태</b>: 참여예정 / 미참여 / 낙찰 / 유찰 / 취소 선택 관리<br>· <b>비고</b>: 낙찰사, 경쟁사 등 메모 입력 후 저장<br>· <b>최신순 / 마감임박순</b>: 결과 정렬 방식 변경<br>· <b>나라장터 바로가기</b>: 해당 공고 페이지로 이동</div>
+      </div>
+      <div style="background:var(--gray);border-radius:var(--r-md);padding:12px 14px;">
+        <div style="font-weight:700;color:var(--ts);margin-bottom:6px;">📊 엑셀 다운로드 / 인쇄</div>
+        <div style="color:var(--ts);">검색 결과 전체를 엑셀로 저장하거나 인쇄할 수 있습니다. 상태·비고 메모도 함께 저장됩니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 키워드/필터 추가 모달 -->
 <div class="modal-bg" id="addModal">
   <div class="modal">
@@ -241,9 +277,15 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
   </div>
 
   <!-- 검색 유형 -->
-  <div class="stype-bar">
-    <button class="stype-btn active" id="stype-bid" onclick="setType('bid')">📋 입찰공고</button>
-    <button class="stype-btn" id="stype-pre" onclick="setType('pre')">📌 사전규격공개</button>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+    <div class="stype-bar" style="margin-bottom:0;">
+      <button class="stype-btn active" id="stype-bid" onclick="setType('bid')">📋 입찰공고</button>
+      <button class="stype-btn" id="stype-pre" onclick="setType('pre')">📌 사전규격공개</button>
+    </div>
+    <button class="btn-sm" onclick="openModal('helpModal')" style="display:flex;align-items:center;gap:5px;font-size:12px;">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      사용설명서
+    </button>
   </div>
 
   <!-- 검색 패널 -->
@@ -265,6 +307,10 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <!-- 업무유형 -->
     <div class="row-hdr" style="margin-bottom:8px">
       <span class="row-lbl">업무 유형 필터</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="selectAllFil()">전체선택</button>
+        <button class="btn-sm" style="font-size:11px;padding:3px 9px" onclick="clearFil()">선택해제</button>
+      </div>
     </div>
     <div class="filter-row" id="filterRow"></div>
 
@@ -272,9 +318,9 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     <div class="search-actions">
       <button class="btn-primary" id="searchBtn" onclick="startSearch()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        전체 검색
+        검색
       </button>
-      <button class="btn-sm" onclick="clearAll()">초기화</button>
+      <button class="btn-sm" onclick="clearResult()">초기화</button>
 
       <div class="period-wrap">
         <span class="period-lbl">검색기간</span>
@@ -452,7 +498,16 @@ function removeKw(kw){ KW1=KW1.filter(k=>k!==kw); selKw.delete(kw); localStorage
 function removeFil(f){ KW2=KW2.filter(k=>k!==f); selFil.delete(f); localStorage.setItem('g2b_kw2',JSON.stringify(KW2)); renderFilters(); }
 function selectAllKw(){ KW1.forEach(k=>selKw.add(k)); renderKw(); }
 function clearKw(){ selKw.clear(); renderKw(); }
+function selectAllFil(){ KW2.forEach(k=>selFil.add(k)); renderFilters(); }
+function clearFil(){ selFil.clear(); renderFilters(); }
 function clearAll(){ selKw.clear(); selFil.clear(); renderKw(); renderFilters(); }
+function clearResult(){
+  allResults=[]; kwCounts={};
+  document.getElementById('resultArea').style.display='none';
+  document.getElementById('statsRow').style.display='none';
+  document.getElementById('emptyState').style.display='block';
+  showToast('검색 결과가 초기화되었습니다');
+}
 
 function openAdd(target){
   addTarget=target;
@@ -588,7 +643,7 @@ async function startSearch(){
     document.getElementById('emptyState').style.display='block';
   } finally {
     btn.disabled=false;
-    btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
+    btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 검색';
     document.getElementById('loadBar').classList.remove('on');
   }
 }
@@ -664,7 +719,7 @@ renderResults();
 
 document.getElementById('searchBtn').disabled = false;
 
-document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 전체 검색';
+document.getElementById('searchBtn').innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 검색';
 
 document.getElementById('loadBar').classList.remove('on');
 
