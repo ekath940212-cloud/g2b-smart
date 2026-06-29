@@ -355,11 +355,17 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
         </button>
       </div>
     </div>
-    <div class="tab-bar">
-      <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">전체</button>
-      <button class="tab-btn" id="tab-urgent" onclick="switchTab('urgent')">마감임박 D-7</button>
-      <button class="tab-btn" id="tab-active" onclick="switchTab('active')">진행중</button>
-      <button class="tab-btn" id="tab-expired" onclick="switchTab('expired')">마감</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+      <div class="tab-bar" style="margin-bottom:0;">
+        <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">전체</button>
+        <button class="tab-btn" id="tab-urgent" onclick="switchTab('urgent')">마감임박 D-7</button>
+        <button class="tab-btn" id="tab-active" onclick="switchTab('active')">진행중</button>
+        <button class="tab-btn" id="tab-expired" onclick="switchTab('expired')">마감</button>
+      </div>
+      <div style="display:flex;gap:4px;">
+        <button class="tab-btn active" id="sort-ntce" onclick="switchSort('ntce')">최신순</button>
+        <button class="tab-btn" id="sort-close" onclick="switchSort('close')">마감임박순</button>
+      </div>
     </div>
     <div class="card-grid" id="cardGrid"></div>
   </div>
@@ -404,6 +410,7 @@ let selKw = new Set(KW1);
 let selFil = new Set(KW2);
 let allResults = [];
 let kwCounts = {}; // 건의①: 키워드별 결과수
+let currentSort = 'ntce'; // 정렬: ntce=최신순, close=마감임박순
 let currentTab = 'all';
 let searchType = 'bid';
 let notes = {};
@@ -700,12 +707,25 @@ document.getElementById('loadBar').classList.remove('on');
 
 
 function getFiltered(){
+  let items;
   switch(currentTab){
-    case 'urgent': return allResults.filter(r=>{const d=getDday(r);return d!==null&&d>=0&&d<=7;});
-    case 'active': return allResults.filter(r=>{const d=getDday(r);return d===null||d>0;});
-    case 'expired': return allResults.filter(r=>{const d=getDday(r);return d!==null&&d<0;});
-    default: return allResults;
+    case 'urgent': items=allResults.filter(r=>{const d=getDday(r);return d!==null&&d>=0&&d<=7;}); break;
+    case 'active': items=allResults.filter(r=>{const d=getDday(r);return d===null||d>0;}); break;
+    case 'expired': items=allResults.filter(r=>{const d=getDday(r);return d!==null&&d<0;}); break;
+    default: items=[...allResults];
   }
+  if(currentSort==='close'){
+    items.sort((a,b)=>{
+      const da=getDday(a), db=getDday(b);
+      if(da===null&&db===null) return 0;
+      if(da===null) return 1;
+      if(db===null) return -1;
+      return da-db;
+    });
+  } else {
+    items.sort((a,b)=>new Date(b.ntceDt||b.bidNtceDt||0)-new Date(a.ntceDt||a.bidNtceDt||0));
+  }
+  return items;
 }
 
 function getDday(item){
@@ -820,6 +840,12 @@ function saveNote(key,idx){
 function switchTab(tab){
   currentTab=tab;
   ['all','urgent','active','expired'].forEach(t=>document.getElementById(`tab-${t}`).classList.toggle('active',t===tab));
+  renderCards(getFiltered());
+}
+
+function switchSort(sort){
+  currentSort=sort;
+  ['ntce','close'].forEach(s=>{const el=document.getElementById(`sort-${s}`);if(el)el.classList.toggle('active',s===sort);});
   renderCards(getFiltered());
 }
 
