@@ -163,6 +163,20 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 .empty-title{font-size:15px;font-weight:600;color:var(--ts);margin-bottom:5px;}
 .empty-desc{font-size:13px;line-height:1.7;}
 
+/* 프리셋 */
+.preset-section{margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.preset-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.preset-lbl{font-size:12px;font-weight:600;color:var(--ts);}
+.preset-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:0;}
+.preset-item{display:flex;align-items:center;gap:4px;background:var(--gray);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--ts);}
+.preset-item:hover{border-color:var(--blue-m);}
+.preset-name{cursor:pointer;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.preset-name:hover{color:var(--blue);}
+.preset-edit-inp{border:none;background:transparent;font-size:12px;color:var(--tp);outline:none;width:100px;}
+.preset-btn{background:none;border:none;cursor:pointer;padding:1px 3px;font-size:11px;color:var(--th);line-height:1;border-radius:3px;}
+.preset-btn:hover{color:var(--blue);background:var(--blue-l);}
+.preset-btn.del:hover{color:var(--red);background:var(--red-l);}
+
 /* 피드백 */
 .fb-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:14px;}
 .fb-types{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
@@ -329,6 +343,18 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
     </div>
     <div class="filter-row" id="filterRow"></div>
 
+    <!-- 설정 저장 -->
+    <div class="preset-section">
+      <div class="preset-section-hdr">
+        <span class="preset-lbl">💾 저장된 설정</span>
+        <button class="btn-sm" style="font-size:11px;padding:3px 10px;display:flex;align-items:center;gap:4px;" onclick="savePreset()">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          현재 설정 저장
+        </button>
+      </div>
+      <div class="preset-list" id="presetList"></div>
+    </div>
+
     <!-- 검색 액션 + 기간 -->
     <div class="search-actions">
       <button class="btn-primary" id="searchBtn" onclick="startSearch()">
@@ -443,8 +469,9 @@ let currentSort = 'ntce'; // 정렬: ntce=최신순, close=마감임박순
 let currentTab = 'all';
 let searchType = 'bid';
 let notes = {};
-let statuses = {}; 
+let statuses = {};
 let feedbacks = [];
+let presets = [];
 let curPeriod = '1m';
 let activeFbType = '사용자 의견';
 let addTarget = 'kw';
@@ -463,10 +490,11 @@ function loadStorage() {
   notes=JSON.parse(localStorage.getItem('g2b_notes')||'{}');
   statuses=JSON.parse(localStorage.getItem('g2b_statuses')||'{}');
   feedbacks=JSON.parse(localStorage.getItem('g2b_fb')||'[]');
+  presets=JSON.parse(localStorage.getItem('g2b_presets')||'[]');
   const k1=localStorage.getItem('g2b_kw1'); if(k1){ KW1=JSON.parse(k1); }
   const k2=localStorage.getItem('g2b_kw2'); if(k2){ const _p=JSON.parse(k2); if(_p.length>=8) KW2=_p; else localStorage.removeItem('g2b_kw2'); }
   selKw=new Set(KW1); selFil=new Set(KW2);
-  renderKw(); renderFilters();
+  renderKw(); renderFilters(); renderPresets();
 }
 
 // ===== 검색 유형 =====
@@ -930,6 +958,69 @@ function renderFbList(){
     const [bg,fg]=(colors[fb.type]||'#f1f3f6;color:#5a6070').split(';');
     return `<div class="fb-item"><div class="fb-item-hdr"><span class="fb-badge" style="background:${bg};${fg}">${fb.type}</span><span class="fb-date">${fb.date}</span></div><div style="font-size:12px;line-height:1.5">${esc(fb.text)}</div></div>`;
   }).join('');
+}
+
+// ===== 프리셋 =====
+function savePreset(){
+  if(KW1.length===0){ showToast('저장할 키워드가 없습니다'); return; }
+  const name='설정 '+(presets.length+1);
+  presets.push({id:Date.now(), name, kw1:[...KW1], kw2:[...KW2]});
+  localStorage.setItem('g2b_presets',JSON.stringify(presets));
+  renderPresets();
+  showToast(`"${name}" 저장됨`);
+}
+
+function loadPreset(id){
+  const p=presets.find(x=>x.id===id); if(!p) return;
+  KW1=[...p.kw1]; KW2=[...p.kw2];
+  selKw=new Set(KW1); selFil=new Set(KW2);
+  localStorage.setItem('g2b_kw1',JSON.stringify(KW1));
+  localStorage.setItem('g2b_kw2',JSON.stringify(KW2));
+  renderKw(); renderFilters();
+  showToast(`"${p.name}" 불러옴`);
+}
+
+function deletePreset(id){
+  presets=presets.filter(x=>x.id!==id);
+  localStorage.setItem('g2b_presets',JSON.stringify(presets));
+  renderPresets();
+  showToast('설정이 삭제되었습니다');
+}
+
+function startEditPreset(id){
+  const p=presets.find(x=>x.id===id); if(!p) return;
+  const nameEl=document.getElementById(`pname-${id}`);
+  const inp=document.createElement('input');
+  inp.className='preset-edit-inp';
+  inp.value=p.name;
+  inp.onblur=()=>finishEditPreset(id,inp.value);
+  inp.onkeydown=e=>{ if(e.key==='Enter') inp.blur(); if(e.key==='Escape'){ inp.value=p.name; inp.blur(); } };
+  nameEl.innerHTML=''; nameEl.appendChild(inp);
+  inp.focus(); inp.select();
+}
+
+function finishEditPreset(id,val){
+  const name=val.trim()||'설정';
+  const p=presets.find(x=>x.id===id); if(!p) return;
+  p.name=name;
+  localStorage.setItem('g2b_presets',JSON.stringify(presets));
+  renderPresets();
+}
+
+function renderPresets(){
+  const list=document.getElementById('presetList');
+  if(!list) return;
+  if(!presets.length){
+    list.innerHTML='<span style="font-size:11px;color:var(--th)">저장된 설정이 없습니다. 키워드와 업무유형을 선택 후 저장하세요.</span>';
+    return;
+  }
+  list.innerHTML=presets.map(p=>`
+    <div class="preset-item">
+      <span class="preset-name" id="pname-${p.id}" onclick="loadPreset(${p.id})" title="클릭하면 이 설정으로 적용">${esc(p.name)}</span>
+      <button class="preset-btn" onclick="startEditPreset(${p.id})" title="이름 수정">✏️</button>
+      <button class="preset-btn del" onclick="deletePreset(${p.id})" title="삭제">✕</button>
+    </div>
+  `).join('');
 }
 
 // ===== 모달 =====
