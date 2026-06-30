@@ -200,7 +200,18 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif;bac
 }
 
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@media(max-width:640px){.wrap{padding:12px;}.stats{grid-template-columns:repeat(2,1fr);}.period-wrap{margin-left:0;width:100%;}}
+@media(max-width:640px){
+  .wrap{padding:12px;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .period-wrap{margin-left:0;width:100%;}
+  .card-meta{gap:6px 10px;}
+  .card-meta span{font-size:11px;}
+  .card-title{font-size:13px;}
+  .card-actions{gap:6px;}
+  .note-inp{min-width:80px;}
+  .stype-btn{padding:8px 14px;font-size:12px;}
+  .tab-bar{flex-wrap:wrap;}
+}
 </style>
 </head>
 <body>
@@ -460,7 +471,7 @@ function setType(t) {
   ['bid','pre'].forEach(x=>document.getElementById('stype-'+x).classList.toggle('active',x===t));
   document.getElementById('spTtl').textContent = t==='bid'?'🔍 입찰공고 검색':'🔍 사전규격공개 검색';
   document.getElementById('emptyDesc').innerHTML = t==='bid'
-    ?'음식물, 소각, 매립 등 키워드를 선택한 뒤<br>전체 검색을 누르면 한 번에 결과를 가져옵니다'
+    ?'음식물, 소각, 매립 등 키워드를 선택한 뒤<br>검색 버튼을 누르면 한 번에 결과를 가져옵니다'
     :'사전규격공개는 실공고 이전 단계입니다.<br>키워드 선택 후 검색하면 사전규격 목록을 가져옵니다';
   allResults=[]; kwCounts={};
   document.getElementById('resultArea').style.display='none';
@@ -756,7 +767,13 @@ function getDday(item){
 
 function renderCards(items){
   const g=document.getElementById('cardGrid');
-  if(!items.length){ g.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">해당 조건의 공고가 없습니다</div></div>'; return; }
+  if(!items.length){
+    const isFiltered = currentTab !== 'all';
+    const msg = isFiltered
+      ? `<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">해당 조건의 공고가 없습니다</div><div class="empty-desc">다른 탭을 선택하거나 <b>전체</b> 탭을 확인해보세요</div></div>`
+      : `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">검색 결과가 없습니다</div><div class="empty-desc">키워드나 검색 기간을 바꿔서 다시 시도해보세요</div></div>`;
+    g.innerHTML=msg; return;
+  }
   g.innerHTML=items.map((item,idx)=>{
     const dday=getDday(item); const isPre=item._isPreSpec;
     let dc='dday-g',cc='normal',dt='';
